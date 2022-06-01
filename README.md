@@ -1,7 +1,7 @@
 # electiveLogiciel
 Projet Élective Logiciel
 
-## Ce projet ce retrouve au lien suivant : https://moodle-ingenieurs.cesi.fr/pluginfile.php/491256/mod_resource/content/2/co/ProjetElective.html#aN6
+## Ce projet se retrouve au lien suivant : https://moodle-ingenieurs.cesi.fr/pluginfile.php/491256/mod_resource/content/2/co/ProjetElective.html#aN6
 
 # 1- Sujet
 
