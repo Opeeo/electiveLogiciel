@@ -1,0 +1,14 @@
+version: '1'
+
+services:
+  db:
+    image: 'mongo'
+    ports:
+      - "27017:27017"
+
+  db_user:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlpw
+    ports:
+      - 3306:3306
