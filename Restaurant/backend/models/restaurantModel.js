@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const restaurantSchema = mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: [true, "Name required"]
+    },
     siret_number: Number,
     description: String,
     street_name: String,
@@ -9,7 +12,11 @@ const restaurantSchema = mongoose.Schema({
     street_number: Number,
     postal_code: Number,
     city: String,
-    id_restaurator: Number,
+    type: String,
+    id_restaurator: {
+        type: String,
+        required: [true, "id_restaurator required"]
+    },
 },{
     timestamps: true,
 });
