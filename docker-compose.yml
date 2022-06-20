@@ -1,14 +1,6 @@
 version: '3'
 
 services:
-  db:
-    image: 'mongo'
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=docker
-      - MONGO_INITDB_ROOT_PASSWORD=mongopw
-    ports:
-      - "27017:27017"
-
   db_user:
     image: mysql:latest
     environment:

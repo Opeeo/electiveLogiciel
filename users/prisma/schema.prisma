@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile{
+  id Int @id @default(autoincrement())
+  last_name String @db.VarChar(255)
+  first_name String @db.VarChar(255)
+  birthday DateTime @default(now()) @db.Timestamp(6)
+  email String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+  phone_number String @db.VarChar(255)
+  deliveryman Deliveryman?
+  consumer Consumer?
+  developer Developer?
+  restaurator Restaurator?
+  adressesOfProfile AdressesOfProfile[]
+  sponsor Sponsorship[] @relation("sponsor")
+  sponsored Sponsorship[] @relation("sponsored")
+}
+
+model Deliveryman{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+  vehicule_type String @db.VarChar(255)
+}
+
+model Consumer{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+  delevery_notification Boolean @default(true)
+  promotionnal_notification Boolean @default(true)
+  promotionnal_email Boolean @default(true)
+}
+
+model Developer{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+}
+
+model Restaurator{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+}
+
+model Adress{
+  id Int @id @default(autoincrement())
+  street_number Int
+  street_name String @db.VarChar(255)
+  building_number Int
+  city String @db.VarChar(255)
+  additionnal_adress String @db.VarChar(255)
+  adressesOfProfile AdressesOfProfile[]
+}
+
+model AdressesOfProfile{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+  adressId Int
+  adress Adress @relation(fields: [adressId], references: [id])
+  assignedAt DateTime @default(now())
+
+  @@id([profileId, adressId])
+}
+
+model Sponsorship{
+  sponsorId Int
+  Sponsor Profile @relation("sponsor", fields: [sponsorId], references: [id])
+  sponsoredId Int @unique
+  Sponsored Profile @relation("sponsored", fields: [sponsoredId], references: [id])
+  sponsorship_date DateTime @default(now())
+}
