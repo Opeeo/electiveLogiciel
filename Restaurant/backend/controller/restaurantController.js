@@ -1,4 +1,4 @@
-const asyncHandler= require ("express-async-handler");
+const asyncHandler = require ("express-async-handler");
 const Restaurant = require ('../models/restaurantModel');
 
 //@desc Get restaurants
@@ -28,10 +28,7 @@ const createARestaurant = asyncHandler(async (req, res, next) => {
         throw new Error('Please provide an id of a restaurator or a restaurant name');
     }
 
-    const restaurant = await Restaurant.create({
-        name : req.body.name,
-        id_restaurator : req.body.id_restaurator,
-    });
+    const restaurant = await Restaurant.create(req.body);
 
     res.status(200).json(restaurant);
 });

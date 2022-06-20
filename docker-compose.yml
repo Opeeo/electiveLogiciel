@@ -7,10 +7,3 @@ services:
       - "27017:27017"     
     volumes:       
       - ~/apps/mongo:/data/db 
-
-  db_user:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=mysqlpw
-    ports:
-      - 3306:3306
