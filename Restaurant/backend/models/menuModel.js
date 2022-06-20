@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Action = require("./articleModel");
 
-const articleSchema = mongoose.Schema({
+const menuSchema = mongoose.Schema({
     name: {
         type: String,
         required: [true, "Name required"]
@@ -8,6 +9,7 @@ const articleSchema = mongoose.Schema({
     type: String,
     price: Number,
     description: String,
+    articles: [mongoose.Schema.Types.ObjectId],
     id_restaurant: {
         type: mongoose.Schema.Types.ObjectId,
         required: [true, "id_restaurant required"]
@@ -16,5 +18,4 @@ const articleSchema = mongoose.Schema({
     timestamps: true,
 });
 
-
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model('Menu', menuSchema);
