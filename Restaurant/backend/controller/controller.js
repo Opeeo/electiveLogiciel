@@ -1,4 +1,5 @@
 const asyncHandler= require ("express-async-handler");
+const Restaurant = require ('../models/restaurantModel');
 
 //@desc Get restaurants
 //@route GET /api/restaurants/
