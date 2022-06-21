@@ -1,5 +1,6 @@
 const asyncHandler = require ("express-async-handler");
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require('@prisma/client');
+const { now } = require("mongoose");
 
 const prisma = new PrismaClient()
 
@@ -78,7 +79,8 @@ const deleteAProfile = asyncHandler(async (req, res, next) => {
         throw new Error('Restaurant not found');
     }
 
-    const deletedProfile = await prisma.profile.delete({ where: {id: Number(req.params.id)} });
+    const deletedProfile = await prisma.profile.update({ where: {id: Number(req.params.id)}, data: {
+        deletedAt: now()} });
 
     res.status(200).json(deletedProfile);
 });        

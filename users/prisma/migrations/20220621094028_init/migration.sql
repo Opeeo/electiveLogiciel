@@ -1,11 +1,24 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `Profile` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `last_name` VARCHAR(255) NOT NULL,
+    `first_name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `phone_number` VARCHAR(255) NOT NULL,
+    `deletedAt` DATETIME(3) NOT NULL DEFAULT ('0000-00-00 00:00:00'),
 
-  - Added the required column `vehicule_type` to the `Deliveryman` table without a default value. This is not possible if the table is not empty.
+    UNIQUE INDEX `Profile_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-*/
--- AlterTable
-ALTER TABLE `Deliveryman` ADD COLUMN `vehicule_type` VARCHAR(255) NOT NULL;
+-- CreateTable
+CREATE TABLE `Deliveryman` (
+    `profileId` INTEGER NOT NULL,
+    `vehicule_type` VARCHAR(255) NOT NULL,
+
+    UNIQUE INDEX `Deliveryman_profileId_key`(`profileId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Consumer` (
@@ -60,6 +73,9 @@ CREATE TABLE `Sponsorship` (
 
     UNIQUE INDEX `Sponsorship_sponsoredId_key`(`sponsoredId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Deliveryman` ADD CONSTRAINT `Deliveryman_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `Profile`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Consumer` ADD CONSTRAINT `Consumer_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `Profile`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
