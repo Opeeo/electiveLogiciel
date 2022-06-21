@@ -9,10 +9,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended : false }));
 
-app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/', require('./routes/routes'));
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
-
-app.get("/", (req, res) => {
-    res.send('Hello');
-  });

@@ -7,10 +7,4 @@ services:
       - MYSQL_ROOT_PASSWORD=mysqlpw
     ports:
       - 3306:3306
-  
-  users:
-    build: './users'
-    ports:
-      - "3002:3000"
-    depends_on: 
-      - db_user
+
