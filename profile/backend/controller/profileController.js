@@ -19,7 +19,12 @@ const getProfiles = asyncHandler(async (req, res, next) => {
 const getAProfile = asyncHandler(async (req, res, next) => {
     const profile = await prisma.profile.findUnique({ where: {id: Number(req.params.id)} });
 
+    if(!profile){
+        res.status(400);
+        throw new Error('Invalid profile'); 
+    }
     res.status(200).json(profile);
+    
 });
 
 //@desc Create a profile
@@ -72,9 +77,7 @@ const updateAProfile = asyncHandler(async (req, res, next) => {
 //@access Private
 const deleteAProfile = asyncHandler(async (req, res, next) => {
 
-    const profile = await prisma.profile.findUnique({ where: {id: Number(req.params.id)} });
-
-    if(!profile){
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.params.id)} })){
         res.status(400);
         throw new Error('Restaurant not found');
     }

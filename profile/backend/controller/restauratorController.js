@@ -16,13 +16,15 @@ const getRestaurator = asyncHandler(async (req, res, next) => {
 //@route GET /api/restaurator/:id
 //@access Private
 const getARestaurator = asyncHandler(async (req, res, next) => {
-    try {
-        const restaurator = await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}})
-        res.status(200).json(restaurator);
-    } catch (error) {
+
+    const restaurator = await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}})
+
+    if(!restaurator){
         res.status(400)
         throw new Error('Invalid restaurator')
     }
+    res.status(200).json(restaurator);
+
 });
 
 
@@ -34,12 +36,12 @@ const createARestaurator = asyncHandler(async (req, res, next) => {
         res.status(400);
         throw new Error('Missing information');
     }
-    try {
-        const profile = await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })
-    } catch (error) {
+    
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })){
         res.status(400)
         throw new Error('Invalid profile')
     }
+
     const restaurator = await prisma.restaurator.create({
         data: {
             profileId: Number(req.body.profile_id),
@@ -53,11 +55,10 @@ const createARestaurator = asyncHandler(async (req, res, next) => {
 //@route PUT /api/restaurator/:id
 //@access Private
 const updateARestaurator = asyncHandler(async (req, res, next) => {
-    try {
-        const restaurator = await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid restaurator')
+
+    if(!await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Restaurator not found');
     }
 
     const updatedRestaurator = await prisma.restaurator.update({
@@ -73,11 +74,9 @@ const updateARestaurator = asyncHandler(async (req, res, next) => {
 //@route DELETE /api/restaurator/:id
 //@access Private
 const deleteARestaurator = asyncHandler(async (req, res, next) => {
-    try {
-        const reestaurator = await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid restaurator')
+    if(!await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Restaurator not found');
     }
 
     const deletedRestaurator = await prisma.restaurator.delete({where: {profileId: Number(req.params.id)}});

@@ -16,14 +16,13 @@ const getConsumer = asyncHandler(async (req, res, next) => {
 //@route GET /api/consumer/:id
 //@access Private
 const getAConsumer = asyncHandler(async (req, res, next) => {
-    try {
-        const consumer = await prisma.consumer.findUnique({ where: {profileId: Number(req.params.id)}})
-    } catch (error) {
+
+    const consumer = await prisma.consumer.findUnique({ where: {profileId: Number(req.params.id)}})
+    if(!consumer){
         res.status(400)
         throw new Error('Invalid consumer')
     }
-
-    res.status(200).json(consumer);
+    res.status(200).json(consumer);   
 });
 
 
@@ -35,12 +34,12 @@ const createAConsumer = asyncHandler(async (req, res, next) => {
         res.status(400);
         throw new Error('Missing information');
     }
-    try {
-        const profile = await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })
-    } catch (error) {
+    
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })){
         res.status(400)
-        throw new Error('Invalid profile id')
+        throw new Error('Invalid profile')
     }
+
     const consumer = await prisma.consumer.create({
         data: {
             profileId: Number(req.body.profile_id),
@@ -49,17 +48,17 @@ const createAConsumer = asyncHandler(async (req, res, next) => {
     });
 
     res.status(201).json(consumer);
+
 });
 
 //@desc update a consumer
 //@route PUT /api/consumer/:id
 //@access Private
 const updateAConsumer = asyncHandler(async (req, res, next) => {
-    try {
-        const consumer = await prisma.consumer.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid consumer')
+
+    if(!await prisma.consumer.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Consumer not found');
     }
 
     const updatedConsumer = await prisma.consumer.update({
@@ -75,11 +74,9 @@ const updateAConsumer = asyncHandler(async (req, res, next) => {
 //@route DELETE /api/consumer/:id
 //@access Private
 const deleteAConsumer = asyncHandler(async (req, res, next) => {
-    try {
-        const consumer = await prisma.consumer.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid consumer')
+    if(!await prisma.consumer.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Consumer not found');
     }
 
     const deletedConsumer = await prisma.consumer.delete({where: {profileId: Number(req.params.id)}});

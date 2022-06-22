@@ -16,13 +16,13 @@ const getDeveloper = asyncHandler(async (req, res, next) => {
 //@route GET /api/developer/:id
 //@access Private
 const getADeveloper = asyncHandler(async (req, res, next) => {
-    try {
-        const developer = await prisma.developer.findUnique({ where: {profileId: Number(req.params.id)}})
-        res.status(200).json(developer);
-    } catch (error) {
+
+    const developer = await prisma.developer.findUnique({ where: {profileId: Number(req.params.id)}})
+    if(!developer){
         res.status(400)
         throw new Error('Invalid developer')
     }
+    res.status(200).json(developer);
 });
 
 
@@ -34,9 +34,8 @@ const createADeveloper = asyncHandler(async (req, res, next) => {
         res.status(400);
         throw new Error('Missing information');
     }
-    try {
-        const profile = await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })
-    } catch (error) {
+
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })){
         res.status(400)
         throw new Error('Invalid profile')
     }
@@ -47,17 +46,17 @@ const createADeveloper = asyncHandler(async (req, res, next) => {
     });
 
     res.status(201).json(developer);
+    
 });
 
 //@desc update a developer
 //@route PUT /api/developer/:id
 //@access Private
 const updateADeveloper = asyncHandler(async (req, res, next) => {
-    try {
-        const developer = await prisma.developer.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid developer')
+
+    if(!await prisma.developer.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Developer not found');
     }
 
     const updatedDeveloper = await prisma.developer.update({
@@ -73,11 +72,9 @@ const updateADeveloper = asyncHandler(async (req, res, next) => {
 //@route DELETE /api/developer/:id
 //@access Private
 const deleteADeveloper = asyncHandler(async (req, res, next) => {
-    try {
-        const developer = await prisma.developer.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid developer')
+    if(!await prisma.developer.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Developer not found');
     }
 
     const deletedDeveloper = await prisma.developer.delete({where: {profileId: Number(req.params.id)}});

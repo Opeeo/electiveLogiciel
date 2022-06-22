@@ -16,13 +16,12 @@ const getDeliveryman = asyncHandler(async (req, res, next) => {
 //@route GET /api/deliveryman/:id
 //@access Private
 const getADeliveryman = asyncHandler(async (req, res, next) => {
-    try {
-        const deliveryman = await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}})
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid profile')
-    }
 
+    const deliveryman = await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}})
+    if(!deliveryman){
+        res.status(400)
+        throw new Error('Invalid deliveryman')
+    }
     res.status(200).json(deliveryman);
 });
 
@@ -35,12 +34,11 @@ const createADeliveryman = asyncHandler(async (req, res, next) => {
         res.status(400);
         throw new Error('Missing information');
     }
-    try {
-        const profile = await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })
-    } catch (error) {
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })){
         res.status(400)
         throw new Error('Invalid profile')
     }
+
     const deliveryman = await prisma.deliveryman.create({
         data: {
             profileId: Number(req.body.profile_id),
@@ -55,11 +53,10 @@ const createADeliveryman = asyncHandler(async (req, res, next) => {
 //@route PUT /api/deliveryman/:id
 //@access Private
 const updateADeliveryman = asyncHandler(async (req, res, next) => {
-    try {
-        const deliveryman = await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid deliveryman')
+
+    if(!await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Deliveryman not found');
     }
 
     const updatedDeliveryman = await prisma.deliveryman.update({
@@ -75,13 +72,11 @@ const updateADeliveryman = asyncHandler(async (req, res, next) => {
 //@route DELETE /api/deliveryman/:id
 //@access Private
 const deleteADeliveryman = asyncHandler(async (req, res, next) => {
-    try {
-        const deliveryman = await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}});
-    } catch (error) {
-        res.status(400)
-        throw new Error('Invalid deliveryman')
-    }
 
+    if(!await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}})){
+        res.status(400);
+        throw new Error('Deliveryman not found');
+    }
     const deletedDeliveryman = await prisma.deliveryman.delete({where: {profileId: Number(req.params.id)}});
 
     res.status(200).json(deletedProfile);
