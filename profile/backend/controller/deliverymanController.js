@@ -82,7 +82,7 @@ const deleteADeliveryman = asyncHandler(async (req, res, next) => {
         throw new Error('Invalid deliveryman')
     }
 
-    const deletedProfile = await prisma.deliveryman.delete({where: {profileId: Number(req.params.id)}});
+    const deletedDeliveryman = await prisma.deliveryman.delete({where: {profileId: Number(req.params.id)}});
 
     res.status(200).json(deletedProfile);
 }); 
