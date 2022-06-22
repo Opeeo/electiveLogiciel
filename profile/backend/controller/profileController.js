@@ -47,7 +47,7 @@ const creatAProfile = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update an profile
-//@route PUT /api/article/:id
+//@route PUT /api/profile/:id
 //@access Private
 const updateAProfile = asyncHandler(async (req, res, next) => {
 
