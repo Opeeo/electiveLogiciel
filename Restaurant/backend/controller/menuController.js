@@ -21,7 +21,7 @@ const createAMenu = asyncHandler(async (req, res, next) => {
 
     const menu = await Menu.create(req.body);
 
-    res.status(200).json(menu);
+    res.status(201).json(menu);
 });
 
 //@desc update a menu
