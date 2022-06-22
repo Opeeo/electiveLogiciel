@@ -56,13 +56,15 @@ model Adress{
   id Int @id @default(autoincrement())
   street_number Int
   street_name String @db.VarChar(255)
-  building_number Int
+  building_number String? @db.VarChar(255)
   city String @db.VarChar(255)
-  additionnal_adress String @db.VarChar(255)
+  postal_code Int
+  additionnal_adress String? @db.VarChar(255)
   adressesOfProfile AdressesOfProfile[]
 }
 
 model AdressesOfProfile{
+  
   profileId Int
   Profile Profile @relation(fields: [profileId], references: [id])
   adressId Int
