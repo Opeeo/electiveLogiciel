@@ -1,0 +1,52 @@
+const asyncHandler = require ("express-async-handler");
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient();
+
+//@desc Get sponsor of a profile
+//@route GET /api/sponsorship/sponsor/:id
+//@access Private
+const getASponsorOfAProfile = asyncHandler(async (req, res, next) => {
+    const consumer = await prisma.sponsorship.findUnique({ where: {sponsoredId: Number(req.params.id)}});
+
+    res.status(200).json(consumer);
+});
+
+//@desc Get sponsored profile by a profile
+//@route GET /api/sponsorship/sponsored/:id
+//@access Private
+const getSponsoredProfile = asyncHandler(async (req, res, next) => {
+    const consumer = await prisma.sponsorship.findMany({ where: {sponsorId: Number(req.params.id)}});
+
+    res.status(200).json(consumer);
+});
+
+//@desc Create a sponsorship
+//@route POST /api/sponsorship/
+//@access Private
+const createASponsorship = asyncHandler(async (req, res, next) => {
+    if(!req.body.sponsorId || !req.body.sponsoredId){
+        res.status(400);
+        throw new Error('Missing information');
+    }
+    
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.sponsorId)} }) ||
+        !await prisma.profile.findUnique({ where: {id: Number(req.body.sponsoredId)} })){
+        res.status(400)
+        throw new Error('Invalid profile')
+    }
+
+    const sponsorship = await prisma.sponsorship.create({ data: {
+        sponsorId: Number(req.body.sponsorId),
+        sponsoredId: Number(req.body.sponsoredId),
+    } });
+
+    res.status(201).json(sponsorship);
+
+});
+
+module.exports = {
+    getASponsorOfAProfile,
+    getSponsoredProfile,
+    createASponsorship
+}

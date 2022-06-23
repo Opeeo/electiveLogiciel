@@ -6,6 +6,8 @@ const { getDeliveryman, getADeliveryman, createADeliveryman, updateADeliveryman,
 const { getConsumer, getAConsumer, createAConsumer, updateAConsumer, deleteAConsumer } = require('../controller/consumerController');
 const { getDeveloper, getADeveloper, createADeveloper, updateADeveloper, deleteADeveloper } = require('../controller/developerController');
 const { getRestaurator, getARestaurator, createARestaurator, updateARestaurator, deleteARestaurator } = require('../controller/RestauratorController');
+const { getASponsorOfAProfile, getSponsoredProfile, createASponsorship } = require("../controller/sponsorshipController");
+
 
 router.route('/profile/').get(getProfiles).post(creatAProfile);
 router.route('/profile/:id').get(getAProfile).put(updateAProfile).delete(deleteAProfile);
@@ -21,5 +23,9 @@ router.route('/developer/:id').get(getADeveloper).put(updateADeveloper).delete(d
 
 router.route('/restaurator/').get(getRestaurator).post(createARestaurator);
 router.route('/restaurator/:id').get(getARestaurator).put(updateARestaurator).delete(deleteARestaurator);
+
+router.route('/sponsorship/sponsor/:id').get(getASponsorOfAProfile);
+router.route('/sponsorship/sponsored/:id').get(getSponsoredProfile);
+router.route('/sponsorship/').post(createASponsorship);
 
 module.exports = router;
