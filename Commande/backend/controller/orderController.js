@@ -45,7 +45,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
     res.status(201).json(order);
 });
 
-//@desc update a command
+//@desc update an order
 //@route PUT /api/order/:id
 //@access Private
 const updateAnOrder = asyncHandler(async (req, res, next) => {
