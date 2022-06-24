@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  db_user:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlpw
+    ports:
+      - 3306:3306
+
