@@ -1,6 +1,9 @@
-version: '1'
-
+version: '3'
 services:
+  sensors:
+    build: ./sensors
+    ports:
+      - 3001:3000
   db:
     image: 'mongo'
     ports:

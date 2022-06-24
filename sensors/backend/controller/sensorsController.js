@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler')
 
-const Sensor = require('../models/sensorsModel')
-const User = require('../models/usersModel')
+const Sensor = require('../models/sensorsModels')
+//const User = require('../models/usersModel')
 
 
 const sensors = [
@@ -14,7 +14,6 @@ const sensors = [
 //@route GET /api/sensors
 //@access Private
 const getSensors = asyncHandler(async(req, res) => {
-    const sensors = await Sensor.find({user: req.user.id})
     res.status(200).json(sensors)
 })
 
@@ -42,7 +41,6 @@ const setSensors = asyncHandler(async(req, res) => {
         type: req.body.type,
         datas: req.body.datas,
         metrics: req.body.metrics,
-        user: req.user.id
     })
     res.status(201).json(sensor)
 })
@@ -65,10 +63,6 @@ const updateSensor = asyncHandler(async(req, res) => {
         throw new Error('User not found')
     }
     //Make sur the logged in user matches the sensor user
-    if(sensor.user.toString() !== req.user.id){
-        res.status(401)
-        throw new Error('User not authorized')
-    }
     const updatedSensor = await Sensor.findByIdAndUpdate(req.params.id, req.body, {new: true,})
     res.status(200).json(updatedSensor)
 })
@@ -85,15 +79,7 @@ const deleteSensors = asyncHandler(async(req, res) => {
 
     //const user = await User.findById(req.user.id)
     //Check for user
-    if(!req.user){
-        res.status(401)
-        throw new Error('User not found')
-    }
     //Make sur the logged in user matches the sensor user
-    if(sensor.user.toString() !== req.user.id){
-        res.status(401)
-        throw new Error('User not authorized')
-    }
 
     await sensor.remove()
     res.status(200).json({id: req.params.id})
