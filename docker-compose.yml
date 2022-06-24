@@ -3,15 +3,27 @@ services:
   sensors:
     build: ./sensors
     ports:
-      - 3001:3000
-  db:
-    image: 'mongo'
+      - "3001:3000"
+    depends_on:
+      - db_user
+  sensors2:
+    build: ./sensors2
     ports:
-      - "27017:27017"
-
+      - "3002:3000"
+    depends_on:
+      - db_user
   db_user:
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=mysqlpw
     ports:
-      - 3306:3306
+      - "3306:3306"
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./sensors/public:/srv/www/static
+    depends_on:
+      - sensors
+      - sensors2
