@@ -8,3 +8,10 @@ services:
     ports:
       - 3306:3306
 
+  adresses:
+    build: './adresses'
+    ports:
+      - 3001:3000
+    depends_on:
+      - db_user
+      
