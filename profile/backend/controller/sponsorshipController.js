@@ -45,8 +45,33 @@ const createASponsorship = asyncHandler(async (req, res, next) => {
 
 });
 
+//@desc Delete a sponsorship
+//@route DELETE /api/sponsorship/
+//@access Private
+const removeASponsorship = asyncHandler(async (req, res, next) => {
+    if(!req.body.sponsorId || !req.body.sponsoredId){
+        res.status(400);
+        throw new Error('Missing information');
+    }
+
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.sponsorId)} }) ||
+        !await prisma.profile.findUnique({ where: {id: Number(req.body.sponsoredId)} })){
+        res.status(400)
+        throw new Error('Invalid profile')
+    }
+
+    const deletedSponsorship = await prisma.sponsorship.delete({
+        where: {
+            sponsoredId: Number(req.body.sponsoredId),
+        }
+    })
+
+    res.status(200).json(deletedSponsorship);
+});
+
 module.exports = {
     getASponsorOfAProfile,
     getSponsoredProfile,
-    createASponsorship
+    createASponsorship,
+    removeASponsorship
 }
