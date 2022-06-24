@@ -30,7 +30,7 @@ const createARestaurant = asyncHandler(async (req, res, next) => {
 
     const restaurant = await Restaurant.create(req.body);
 
-    res.status(200).json(restaurant);
+    res.status(201).json(restaurant);
 });
 
 //@desc update a restaurant
