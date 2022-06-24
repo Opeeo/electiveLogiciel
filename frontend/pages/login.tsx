@@ -17,6 +17,12 @@ import Image from 'next/image';
 const theme = createTheme();
 
 export default function SignIn() {
+
+    const submit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log('submit');
+    }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -73,14 +79,19 @@ export default function SignIn() {
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
                         />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign In
-                        </Button>
+                        <Link href="/home">
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+
+                            >
+                                Sign In
+                            </Button>
+                        </Link>
+
+
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2" underline='hover'>

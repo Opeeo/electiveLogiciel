@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -16,10 +17,11 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Stack from '@mui/material/Stack';
 import Image from 'next/image'
 import { styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
+
 
 
 import styles from './navbar.module.css';
+import Link from 'next/link';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -86,7 +88,7 @@ const ResponsiveAppBar = ({ authentified = false }) => {
     };
 
     return (
-        <AppBar position="static" className={styles.app_bar}>
+        <AppBar position='sticky' className={styles.app_bar}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <IconButton
@@ -151,12 +153,17 @@ const ResponsiveAppBar = ({ authentified = false }) => {
                         ) : (
                             <>
                                 <Stack direction="row" spacing={2}>
-                                    <Button href="/login" variant="outlined" color='success' onClick={() => { console.log(authentified); { authentified = true } }} endIcon={<ArrowForwardIosIcon />}>
-                                        Login
-                                    </Button>
-                                    <Button href="/register" variant="contained" color='success'>
-                                        Register
-                                    </Button>
+                                    <Link href="/login">
+                                        <Button variant="outlined" color='success' onClick={() => { console.log(authentified); { authentified = true } }} endIcon={<ArrowForwardIosIcon />}>
+                                            Login
+                                        </Button>
+                                    </Link>
+                                    <Link href="/register">
+                                        <Button variant="contained" color='success'>
+                                            Register
+                                        </Button>
+                                    </Link>
+
                                 </Stack>
                             </>
                         )}
