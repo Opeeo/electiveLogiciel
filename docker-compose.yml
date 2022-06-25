@@ -14,4 +14,32 @@ services:
       - 3001:3000
     depends_on:
       - db_user
+  
+  commande:
+    build: './Commande'
+    ports:
+      - 3002:3000
+    depends_on:
+      - db_user
+
+  profile:
+    build: './profile'
+    ports:
+      - 3003:3000
+    depends_on:
+      - db_user
+
+  rate:
+    build: './Rate'
+    ports:
+      - 3004:3000
+    depends_on:
+      - db_user
+  
+  restaurant:
+    build: './Restaurant'
+    ports:
+      - 3005:3000
+
+
       
