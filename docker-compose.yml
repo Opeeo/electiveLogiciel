@@ -40,6 +40,23 @@ services:
     build: './Restaurant'
     ports:
       - 3005:3000
+  restaurant1:
+    build: './Restaurant'
+    ports:
+      - 3006:3000
+  
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - restaurant
+      - rate
+      - profile
+      - commande
+      - adresses
 
 
       
