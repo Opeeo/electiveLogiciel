@@ -8,9 +8,11 @@ const { getDeveloper, getADeveloper, createADeveloper, updateADeveloper, deleteA
 const { getRestaurator, getARestaurator, createARestaurator, updateARestaurator, deleteARestaurator } = require('../controller/restauratorController');
 const { getASponsorOfAProfile, getSponsoredProfile, createASponsorship, removeASponsorship } = require("../controller/sponsorshipController");
 
+const {protect} = require('../middleware/authMiddleware')
 
-router.route('/profile/').get(getProfiles).post(registerUser);
-router.route('/profile/:id').get(getAProfile).put(updateAProfile).delete(deleteAProfile);
+
+router.route('/profile/').get(protect, getProfiles).post(registerUser);
+router.route('/profile/:id').get(protect, getAProfile).put(protect, updateAProfile).delete(protect, deleteAProfile);
 router.route('/profile/login').post(loginUser);
 
 router.route('/profile/deliveryman/').get(getDeliveryman).post(createADeliveryman);

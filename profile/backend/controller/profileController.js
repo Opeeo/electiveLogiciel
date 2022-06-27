@@ -1,6 +1,8 @@
 const asyncHandler = require ("express-async-handler");
 const { PrismaClient } = require('@prisma/client');
 const { now } = require("mongoose");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient()
 
@@ -43,24 +45,56 @@ const registerUser = asyncHandler(async (req, res, next) => {
         throw new Error('Profile already exist');
     }
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
     const profile = await prisma.profile.create({
         data: {
             email: req.body.email,
             first_name: req.body.first_name,
             last_name: req.body.last_name,
-            password: req.body.password,
+            password: hashedPassword,
             phone_number: req.body.phone_number,
         },
     });
 
-    res.status(201).json(profile);
+    if(profile){
+        res.status(201).json({
+            _id: profile.id,
+            email: profile.email,
+            first_name: profile.first_name,
+            last_name: profile.last_name,
+            password: profile.password,
+            phone_number: profile.phone_number,
+            token: generateToken(profile.id),
+        });
+    }else {
+        res.status(400);
+        throw new Error('Invalid user data');
+    }
 });
 
 //@desc login a profile
 //@route POST /api/profile/login
 //@access Public
 const loginUser = asyncHandler(async (req, res) => {
-    res.json('login')
+
+    const profile = await prisma.profile.findUnique({ where: {email: req.body.email } });
+
+    if(profile && (await bcrypt.comparer(req.body.password, profile.password))){
+        res.status(201).json({
+            _id: profile.id,
+            email: profile.email,
+            first_name: profile.first_name,
+            last_name: profile.last_name,
+            password: profile.password,
+            phone_number: profile.phone_number,
+            token: generateToken(profile.id),
+        });
+    }else {
+        res.status(400);
+        throw new Error('Invalid credentials');
+    }
 });
 
 //@desc update an profile
@@ -99,6 +133,12 @@ const deleteAProfile = asyncHandler(async (req, res, next) => {
 
     res.status(200).json(deletedProfile);
 });        
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    })
+}
 
 module.exports = {
     getProfiles,
