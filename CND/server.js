@@ -1,5 +1,11 @@
 const express = require("express");
 const multer = require("multer");
+const file = require("./model/model");
+const asyncHandler = require ("express-async-handler");
+const connectDB = require("./config/db");
+const fs = require("file-system");
+
+connectDB(); 
 
 const app = express();
 
@@ -18,13 +24,23 @@ app.get('/test', (req, res, next) => {
     res.send('test');
 });
 
-app.post('/api/uploadFile', upload.single('image'), (req,res) => {
-    console.log(req.file);
-    res.status(200).json(`File uploaded : ${req.file.path}`);
-});
+app.post('/api/uploadFile', upload.single('image'), asyncHandler(async (req,res) => {
+    try{
+        const newFile = await file.create({
+            name: req.file.filename
+        })
+        console.log(req.file);
+        res.status(200).json(`File uploaded ${newFile}`);
+    }catch(error){
+        res.json(error);
+    }
+    
+}));
 
-app.get('/api/getFile/:id', async (req, res) => {
-    res.send()
-})
+app.get('/api/getFile/:id', asyncHandler(async (req, res) => {
+    const getfile = await file.findOne({_id : req.params.id});
 
-app.listen(3000);
+    res.status(200).json(getfile);
+}));
+
+app.listen(8000);
