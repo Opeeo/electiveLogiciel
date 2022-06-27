@@ -88,7 +88,6 @@ const removeAnAdress = asyncHandler(async (req, res, next) => {
 
 module.exports = {
     getAdressesByProfile,
-    getProfilesByAdress,
     giveAnAdress,
-    removeAnAdress
+    removeAnAdress,
 }

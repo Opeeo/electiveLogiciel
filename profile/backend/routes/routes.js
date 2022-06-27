@@ -9,8 +9,8 @@ const { getRestaurator, getARestaurator, createARestaurator, updateARestaurator,
 const { getASponsorOfAProfile, getSponsoredProfile, createASponsorship, removeASponsorship } = require("../controller/sponsorshipController");
 
 
-router.route('/profile/consumer').get(getProfiles).post(creatAProfile);
-router.route('/profile/consumer/:id').get(getAProfile).put(updateAProfile).delete(deleteAProfile);
+router.route('/profile/').get(getProfiles).post(creatAProfile);
+router.route('/profile/:id').get(getAProfile).put(updateAProfile).delete(deleteAProfile);
 
 router.route('/profile/deliveryman/').get(getDeliveryman).post(createADeliveryman);
 router.route('/profile/deliveryman/:id').get(getADeliveryman).put(updateADeliveryman).delete(deleteADeliveryman);
