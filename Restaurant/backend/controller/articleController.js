@@ -2,7 +2,7 @@ const asyncHandler = require ("express-async-handler");
 const Article = require("../models/articleModel");
 
 //@desc Get articles of a restaurant
-//@route GET /api/article/:id_restaurant
+//@route GET /api/restaurant/article/:id_restaurant
 //@access Private
 const getArticles = asyncHandler(async (req, res, next) => {
     const articles = await Article.find({"id_restaurant": req.params.id_restaurant});
@@ -11,7 +11,7 @@ const getArticles = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Create an article
-//@route POST /api/article/
+//@route POST /api/restaurant/article/
 //@access Private
 const createAnArticle = asyncHandler(async (req, res, next) => {
     if(!req.body.name || !req.body.id_restaurant) {
@@ -25,7 +25,7 @@ const createAnArticle = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update an article
-//@route PUT /api/article/:id
+//@route PUT /api/restaurant/article/:id
 //@access Private
 const updateAnArticle = asyncHandler(async (req, res, next) => {
 
@@ -42,7 +42,7 @@ const updateAnArticle = asyncHandler(async (req, res, next) => {
 });
 
 //@desc delete an article
-//@route DELETE /api/article/:id
+//@route DELETE /api/restaurant/article/:id
 //@access Private
 const deleteAnArticle = asyncHandler(async (req, res, next) => {
 

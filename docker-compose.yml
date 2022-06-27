@@ -9,21 +9,21 @@ services:
       - 3306:3306
 
   adresses:
-    build: './adresses'
+    build: './Adresses'
     ports:
       - 3001:3000
     depends_on:
       - db_user
   
-  commande:
-    build: './Commande'
+  order:
+    build: './Order'
     ports:
       - 3002:3000
     depends_on:
       - db_user
 
   profile:
-    build: './profile'
+    build: './Profile'
     ports:
       - 3003:3000
     depends_on:
@@ -53,9 +53,10 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - restaurant
+      - restaurant1
       - rate
       - profile
-      - commande
+      - order
       - adresses
 
 

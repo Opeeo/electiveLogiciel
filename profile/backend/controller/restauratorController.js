@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 //@desc Get restaurator
-//@route GET /api/restaurator/
+//@route GET /api/profile/restaurator/
 //@access Private
 const getRestaurator = asyncHandler(async (req, res, next) => {
     const restaurator = await prisma.restaurator.findMany();
@@ -13,7 +13,7 @@ const getRestaurator = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Get one restaurator
-//@route GET /api/restaurator/:id
+//@route GET /api/profile/restaurator/:id
 //@access Private
 const getARestaurator = asyncHandler(async (req, res, next) => {
 
@@ -29,7 +29,7 @@ const getARestaurator = asyncHandler(async (req, res, next) => {
 
 
 //@desc Create a restaurator
-//@route POST /api/restaurator/
+//@route POST /api/profile/restaurator/
 //@access Private
 const createARestaurator = asyncHandler(async (req, res, next) => {
     if(!req.body.profile_id){
@@ -52,7 +52,7 @@ const createARestaurator = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update a restaurator
-//@route PUT /api/restaurator/:id
+//@route PUT /api/profile/restaurator/:id
 //@access Private
 const updateARestaurator = asyncHandler(async (req, res, next) => {
 
@@ -71,7 +71,7 @@ const updateARestaurator = asyncHandler(async (req, res, next) => {
 });
 
 //@desc delete a restaurator
-//@route DELETE /api/restaurator/:id
+//@route DELETE /api/profile/restaurator/:id
 //@access Private
 const deleteARestaurator = asyncHandler(async (req, res, next) => {
     if(!await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}})){

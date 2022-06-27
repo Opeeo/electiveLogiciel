@@ -5,7 +5,7 @@ const { now } = require("mongoose");
 const prisma = new PrismaClient();
 
 //@desc Get adresses by profile
-//@route GET /api/adressesOfProfile/profile/:id_profile
+//@route GET /api/adress/profile/:id_profile
 //@access Private
 const getAdressesByProfile = asyncHandler(async (req, res, next) => {
     const adresses = await prisma.adressesOfProfile.findMany({ where: {profileId: Number(req.params.id)} });
@@ -13,17 +13,8 @@ const getAdressesByProfile = asyncHandler(async (req, res, next) => {
     res.status(200).json(adresses);
 });
 
-//@desc Get profiles by adress
-//@route GET /api/adressesOfProfile/adress/:id_adress
-//@access Private
-const getProfilesByAdress = asyncHandler(async (req, res, next) => {
-    const profiles = await prisma.adressesOfProfile.findMany({ where: {adressId: Number(req.params.id)} });
-
-    res.status(200).json(profiles);
-});
-
 //@desc Create a connetion beetween an adress and a profile
-//@route POST /api/adressesOfProfile/
+//@route POST /api/adress/profile
 //@access Private
 const giveAnAdress = asyncHandler(async (req, res, next) => {
     if(!req.body.profileId || !req.body.adressId){
@@ -58,7 +49,7 @@ const giveAnAdress = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Delete a connection beetween an adress and a profile
-//@route DELETE /api/adressesOfProfile/
+//@route DELETE /api/adress/profile/
 //@access Private
 const removeAnAdress = asyncHandler(async (req, res, next) => {
     if(!req.body.profileId || !req.body.adressId){

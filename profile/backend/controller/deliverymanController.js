@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 //@desc Get deliveryman
-//@route GET /api/deliveryman/
+//@route GET /api/profile/deliveryman/
 //@access Private
 const getDeliveryman = asyncHandler(async (req, res, next) => {
     const deliveryman = await prisma.deliveryman.findMany();
@@ -13,7 +13,7 @@ const getDeliveryman = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Get one deliveryman
-//@route GET /api/deliveryman/:id
+//@route GET /api/profile/deliveryman/:id
 //@access Private
 const getADeliveryman = asyncHandler(async (req, res, next) => {
 
@@ -27,7 +27,7 @@ const getADeliveryman = asyncHandler(async (req, res, next) => {
 
 
 //@desc Create a deliveryman
-//@route POST /api/deliveryman/
+//@route POST /api/profile/deliveryman/
 //@access Private
 const createADeliveryman = asyncHandler(async (req, res, next) => {
     if(!req.body.profile_id){
@@ -50,7 +50,7 @@ const createADeliveryman = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update a deliveryman
-//@route PUT /api/deliveryman/:id
+//@route PUT /api/profile/deliveryman/:id
 //@access Private
 const updateADeliveryman = asyncHandler(async (req, res, next) => {
 
@@ -69,7 +69,7 @@ const updateADeliveryman = asyncHandler(async (req, res, next) => {
 });
 
 //@desc delete a deliveryman
-//@route DELETE /api/deliveryman/:id
+//@route DELETE /api/profile/deliveryman/:id
 //@access Private
 const deleteADeliveryman = asyncHandler(async (req, res, next) => {
 

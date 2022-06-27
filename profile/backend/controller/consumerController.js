@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 //@desc Get consumer
-//@route GET /api/consumer/
+//@route GET /api/profile/consumer/
 //@access Private
 const getConsumer = asyncHandler(async (req, res, next) => {
     const consumer = await prisma.consumer.findMany();
@@ -13,7 +13,7 @@ const getConsumer = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Get one consumer
-//@route GET /api/consumer/:id
+//@route GET /api/profile/consumer/:id
 //@access Private
 const getAConsumer = asyncHandler(async (req, res, next) => {
 
@@ -27,7 +27,7 @@ const getAConsumer = asyncHandler(async (req, res, next) => {
 
 
 //@desc Create a consumer
-//@route POST /api/consumer/
+//@route POST /api/profile/consumer/
 //@access Private
 const createAConsumer = asyncHandler(async (req, res, next) => {
     if(!req.body.profile_id){
@@ -52,7 +52,7 @@ const createAConsumer = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update a consumer
-//@route PUT /api/consumer/:id
+//@route PUT /api/profile/consumer/:id
 //@access Private
 const updateAConsumer = asyncHandler(async (req, res, next) => {
 
@@ -71,7 +71,7 @@ const updateAConsumer = asyncHandler(async (req, res, next) => {
 });
 
 //@desc delete a consumer
-//@route DELETE /api/consumer/:id
+//@route DELETE /api/profile/consumer/:id
 //@access Private
 const deleteAConsumer = asyncHandler(async (req, res, next) => {
     if(!await prisma.consumer.findUnique({ where: {profileId: Number(req.params.id)}})){

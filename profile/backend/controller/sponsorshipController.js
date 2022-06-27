@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 //@desc Get sponsor of a profile
-//@route GET /api/sponsorship/sponsor/:id
+//@route GET /api/profile/sponsorship/sponsor/:id
 //@access Private
 const getASponsorOfAProfile = asyncHandler(async (req, res, next) => {
     const consumer = await prisma.sponsorship.findUnique({ where: {sponsoredId: Number(req.params.id)}});
@@ -13,7 +13,7 @@ const getASponsorOfAProfile = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Get sponsored profile by a profile
-//@route GET /api/sponsorship/sponsored/:id
+//@route GET /api/profile/sponsorship/sponsored/:id
 //@access Private
 const getSponsoredProfile = asyncHandler(async (req, res, next) => {
     const consumer = await prisma.sponsorship.findMany({ where: {sponsorId: Number(req.params.id)}});
@@ -22,7 +22,7 @@ const getSponsoredProfile = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Create a sponsorship
-//@route POST /api/sponsorship/
+//@route POST /api/profile/sponsorship/
 //@access Private
 const createASponsorship = asyncHandler(async (req, res, next) => {
     if(!req.body.sponsorId || !req.body.sponsoredId){
@@ -46,7 +46,7 @@ const createASponsorship = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Delete a sponsorship
-//@route DELETE /api/sponsorship/
+//@route DELETE /api/profile/sponsorship/
 //@access Private
 const removeASponsorship = asyncHandler(async (req, res, next) => {
     if(!req.body.sponsorId || !req.body.sponsoredId){

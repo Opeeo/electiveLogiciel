@@ -8,9 +8,8 @@ const { getAdressesByProfile, getProfilesByAdress, giveAnAdress, removeAnAdress 
 router.route('/adress/').get(getAdresses).post(creatAnAdress);
 router.route('/adress/:id').get(getAnAdress).put(updateAnAdress).delete(deleteAnAdress);
 
-router.route('/adressesOfProfile/profile/:id').get(getAdressesByProfile);
-router.route('/adressesOfProfile/adress/:id').get(getProfilesByAdress);
-router.route('/adressesOfProfile/').post(giveAnAdress).delete(removeAnAdress);
+router.route('/adress/profile/:id').get(getAdressesByProfile);
+router.route('/adress/profile/').post(giveAnAdress).delete(removeAnAdress);
 
 
 module.exports = router;

@@ -2,7 +2,7 @@ const asyncHandler = require ("express-async-handler");
 const Menu = require("../models/menuModel");
 
 //@desc Get menus of a restaurant
-//@route GET /api/menu/:id_restaurant
+//@route GET /api/resturant/menu/:id_restaurant
 //@access Private
 const getMenus = asyncHandler(async (req, res, next) => {
     const menus = await Menu.find({"id_restaurant": req.params.id_restaurant});
@@ -11,7 +11,7 @@ const getMenus = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Create a menu
-//@route POST /api/menu/
+//@route POST /api/restaurant/menu/
 //@access Private
 const createAMenu = asyncHandler(async (req, res, next) => {
     if(!req.body.name || !req.body.id_restaurant) {
@@ -25,7 +25,7 @@ const createAMenu = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update a menu
-//@route PUT /api/menu/:id
+//@route PUT /api/restaurant/menu/:id
 //@access Private
 const updateAMenu = asyncHandler(async (req, res, next) => {
 
@@ -42,7 +42,7 @@ const updateAMenu = asyncHandler(async (req, res, next) => {
 });
 
 //@desc delete a menu
-//@route DELETE /api/menu/:id
+//@route DELETE /api/restaurant/menu/:id
 //@access Private
 const deleteAMenu = asyncHandler(async (req, res, next) => {
 

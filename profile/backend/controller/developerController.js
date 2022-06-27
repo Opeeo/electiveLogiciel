@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 //@desc Get developer
-//@route GET /api/developer/
+//@route GET /api/profile/developer/
 //@access Private
 const getDeveloper = asyncHandler(async (req, res, next) => {
     const developer = await prisma.developer.findMany();
@@ -13,7 +13,7 @@ const getDeveloper = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Get one developer
-//@route GET /api/developer/:id
+//@route GET /api/profile/developer/:id
 //@access Private
 const getADeveloper = asyncHandler(async (req, res, next) => {
 
@@ -27,7 +27,7 @@ const getADeveloper = asyncHandler(async (req, res, next) => {
 
 
 //@desc Create a developer
-//@route POST /api/developer/
+//@route POST /api/profile/developer/
 //@access Private
 const createADeveloper = asyncHandler(async (req, res, next) => {
     if(!req.body.profile_id){
@@ -50,7 +50,7 @@ const createADeveloper = asyncHandler(async (req, res, next) => {
 });
 
 //@desc update a developer
-//@route PUT /api/developer/:id
+//@route PUT /api/profile/developer/:id
 //@access Private
 const updateADeveloper = asyncHandler(async (req, res, next) => {
 
@@ -69,7 +69,7 @@ const updateADeveloper = asyncHandler(async (req, res, next) => {
 });
 
 //@desc delete a developer
-//@route DELETE /api/developer/:id
+//@route DELETE /api/profile/developer/:id
 //@access Private
 const deleteADeveloper = asyncHandler(async (req, res, next) => {
     if(!await prisma.developer.findUnique({ where: {profileId: Number(req.params.id)}})){
