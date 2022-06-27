@@ -27,15 +27,20 @@ const getAProfile = asyncHandler(async (req, res, next) => {
     
 });
 
-//@desc Create a profile
+//@desc Register a user
 //@route POST /api/profile/
 //@access Private
-const creatAProfile = asyncHandler(async (req, res, next) => {
+const registerUser = asyncHandler(async (req, res, next) => {
     if(!req.body.first_name || !req.body.email ||
         !req.body.last_name || !req.body.password ||
         !req.body.phone_number){
         res.status(400);
         throw new Error('Missing information');
+    }
+
+    if(await prisma.profile.findUnique({ where: {email: req.body.email } })){
+        res.status(400);
+        throw new Error('Profile already exist');
     }
 
     const profile = await prisma.profile.create({
@@ -49,6 +54,13 @@ const creatAProfile = asyncHandler(async (req, res, next) => {
     });
 
     res.status(201).json(profile);
+});
+
+//@desc login a profile
+//@route POST /api/profile/login
+//@access Public
+const loginUser = asyncHandler(async (req, res) => {
+    res.json('login')
 });
 
 //@desc update an profile
@@ -91,7 +103,8 @@ const deleteAProfile = asyncHandler(async (req, res, next) => {
 module.exports = {
     getProfiles,
     getAProfile,
-    creatAProfile,
+    registerUser,
     updateAProfile,
-    deleteAProfile
+    deleteAProfile,
+    loginUser,
 }
