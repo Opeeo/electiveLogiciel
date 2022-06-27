@@ -1,5 +1,6 @@
-const asyncHandler = require ("express-async-handler");
-const Restaurant = require ('../models/restaurantModel');
+const asyncHandler = require("express-async-handler");
+const Restaurant = require('../models/restaurantModel');
+const mongoose = require('mongoose');
 
 //@desc Get restaurants
 //@route GET /api/restaurant/
@@ -23,7 +24,7 @@ const getARestaurant = asyncHandler(async (req, res, next) => {
 //@route POST /api/restaurant/
 //@access Private
 const createARestaurant = asyncHandler(async (req, res, next) => {
-    if(!req.body.name || !req.body.id_restaurator){
+    if (!req.body.name || !req.body.id_restaurator) {
         res.status(400);
         throw new Error('Please provide an id of a restaurator or a restaurant name');
     }
@@ -40,12 +41,12 @@ const updateARestaurant = asyncHandler(async (req, res, next) => {
 
     const restaurant = await Restaurant.findById(req.params.id);
 
-    if(!restaurant){
+    if (!restaurant) {
         res.status(400);
         throw new Error('Restaurant not found');
     }
 
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
     res.status(200).json(updatedRestaurant);
 });
@@ -57,12 +58,12 @@ const deleteARestaurant = asyncHandler(async (req, res, next) => {
 
     const restaurant = await Restaurant.findById(req.params.id);
 
-    if(!restaurant){
+    if (!restaurant) {
         res.status(400);
         throw new Error('Restaurant not found');
     }
 
-    const deletedRestaurant =await Restaurant.findByIdAndDelete(req.params.id);
+    const deletedRestaurant = await Restaurant.findByIdAndDelete(req.params.id);
 
     res.status(200).json(deletedRestaurant);
 });
