@@ -38,7 +38,7 @@ model Deliveryman{
 model Consumer{
   profileId Int
   Profile Profile @relation(fields: [profileId], references: [id])
-  delevery_notification Boolean @default(true)
+  delivery_notification Boolean @default(true)
   promotionnal_notification Boolean @default(true)
   promotionnal_email Boolean @default(true)
 }

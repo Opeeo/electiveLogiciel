@@ -32,7 +32,7 @@ model AdressesOfProfile {
 
 model Consumer {
   profileId                 Int     @unique
-  delevery_notification     Boolean @default(true)
+  delivery_notification     Boolean @default(true)
   promotionnal_notification Boolean @default(true)
   promotionnal_email        Boolean @default(true)
   Profile                   Profile @relation(fields: [profileId], references: [id])
