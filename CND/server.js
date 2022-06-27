@@ -3,7 +3,6 @@ const multer = require("multer");
 const file = require("./model/model");
 const asyncHandler = require ("express-async-handler");
 const connectDB = require("./config/db");
-const fs = require("file-system");
 
 connectDB(); 
 
