@@ -63,7 +63,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         res.status(400);
         throw new Error('Role not found');
     }
-    let payload = { id: profile.id, permissions: role.name };
+    let payload = { id: profile.id, permissions: [role.name] };
 
     if(profile){
         res.status(201).json({
@@ -88,11 +88,14 @@ const registerUser = asyncHandler(async (req, res, next) => {
 const loginUser = asyncHandler(async (req, res) => {
 
     const profile = await prisma.profile.findUnique({ where: {email: req.body.email } });
-    const permission = getPermision(profile)
-    console.log(permission)
-    let payload = { id: profile.id, permissions: [permission] };
+    const role = await prisma.role.findUnique({where: {id: profile.roleId}});
+    if(!role){
+        res.status(400);
+        throw new Error('Role not found');
+    }
+    let payload = { id: profile.id, permissions: [role.name] };
 
-    if(profile && (await bcrypt.comparer(req.body.password, profile.password))){
+    if(profile && (await bcrypt.compare(req.body.password, profile.password))){
         res.status(201).json({
             _id: profile.id,
             email: profile.email,
@@ -151,13 +154,6 @@ const generateToken = (payload) => {
         expiresIn: '30d',
     })
 }
-
-const getPermission = asyncHandler(async (profile) => {
-    const role = await prisma.role.findUnique({where: {id: profile.role_id}});
-    return String(role.name);
-});
-
-
 
 module.exports = {
     getProfiles,

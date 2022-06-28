@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const guard = require('express-jwt-permissions')({
+    permissionsProperty: 'permissions',
+})
 
 const { getProfiles, getAProfile, registerUser, updateAProfile, deleteAProfile, loginUser } = require('../controller/profileController');
 const { getDeliveryman, getADeliveryman, createADeliveryman, updateADeliveryman, deleteADeliveryman } = require('../controller/deliverymanController');
@@ -11,13 +14,13 @@ const { createARole, getARole } = require("../controller/roleController");
 
 
 router.route('/profile/').get(getProfiles).post(registerUser);
-router.route('/profile/:id').get(getAProfile).put(updateAProfile).delete(deleteAProfile);
+router.route('/profile/:id', guard.check('admin')).get(getAProfile).put(updateAProfile).delete(deleteAProfile);
 router.route('/profile/login').post(loginUser);
 
 router.route('/profile/deliveryman/').get(getDeliveryman).post(createADeliveryman);
 router.route('/profile/deliveryman/:id').get(getADeliveryman).put(updateADeliveryman).delete(deleteADeliveryman);
 
-router.route('/profile/consumer/').get(getConsumer).post(createAConsumer);
+router.route('/profile/consumer/', guard.check('consumer')).get(getConsumer).post(createAConsumer);
 router.route('/profile/consumer/:id').get(getAConsumer).put(updateAConsumer).delete(deleteAConsumer);
 
 router.route('/profile/developer/').get(getDeveloper).post(createADeveloper);

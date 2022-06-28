@@ -38,13 +38,13 @@ model Role{
 }
 
 model Deliveryman{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
   vehicule_type String @db.VarChar(255)
 }
 
 model Consumer{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
   delivery_notification Boolean 
   promotionnal_notification Boolean 
@@ -52,12 +52,12 @@ model Consumer{
 }
 
 model Developer{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
 }
 
 model Restaurator{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
 }
 
