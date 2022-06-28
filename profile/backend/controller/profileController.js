@@ -35,7 +35,7 @@ const getAProfile = asyncHandler(async (req, res, next) => {
 const registerUser = asyncHandler(async (req, res, next) => {
     if(!req.body.first_name || !req.body.email ||
         !req.body.last_name || !req.body.password ||
-        !req.body.phone_number){
+        !req.body.phone_number || !req.body.role_id){
         res.status(400);
         throw new Error('Missing information');
     }
@@ -55,8 +55,11 @@ const registerUser = asyncHandler(async (req, res, next) => {
             last_name: req.body.last_name,
             password: hashedPassword,
             phone_number: req.body.phone_number,
+            role_id: Number(req.body.role_id),
         },
     });
+
+    let payload = { id: profile.id, permissions: [getPermision(profile)] };
 
     if(profile){
         res.status(201).json({
@@ -66,7 +69,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
             last_name: profile.last_name,
             password: profile.password,
             phone_number: profile.phone_number,
-            token: generateToken(profile.id),
+            role_id: profile.role_id,
+            token: generateToken(payload),
         });
     }else {
         res.status(400);
@@ -80,6 +84,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
 const loginUser = asyncHandler(async (req, res) => {
 
     const profile = await prisma.profile.findUnique({ where: {email: req.body.email } });
+    const permission = getPermision(profile)
+    console.log(permission)
+    let payload = { id: profile.id, permissions: [permission] };
 
     if(profile && (await bcrypt.comparer(req.body.password, profile.password))){
         res.status(201).json({
@@ -89,7 +96,7 @@ const loginUser = asyncHandler(async (req, res) => {
             last_name: profile.last_name,
             password: profile.password,
             phone_number: profile.phone_number,
-            token: generateToken(profile.id),
+            token: generateToken(payload),
         });
     }else {
         res.status(400);
@@ -134,11 +141,16 @@ const deleteAProfile = asyncHandler(async (req, res, next) => {
     res.status(200).json(deletedProfile);
 });        
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (payload) => {
+    return jwt.sign({ payload }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     })
 }
+
+const getPermision = asyncHandler(async (profile) => {
+    const role = await prisma.role.findUnique({where: {id: profile.role_id}});
+    return String(role.name);
+});
 
 module.exports = {
     getProfiles,

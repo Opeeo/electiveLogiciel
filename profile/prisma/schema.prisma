@@ -27,6 +27,14 @@ model Profile{
   adressesOfProfile AdressesOfProfile[]
   sponsor Sponsorship[] @relation("sponsor")
   sponsored Sponsorship[] @relation("sponsored")
+  role_id Int
+  Role Role @relation(fields: [role_id], references: [id])
+}
+
+model Role{
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  profile Profile?
 }
 
 model Deliveryman{
