@@ -2,14 +2,17 @@ import Grid from '@mui/material/Grid';
 import Item from '@mui/material/Grid';
 import Layout from '../../components/layout';
 import styles from "../../styles/Home.module.css";
-import { IRestaurant, getAllRestaurants } from '../../lib/restaurants';
+import { IRestaurant, getRestaurants } from '../../lib/restaurants';
 import RestaurantCard from '../../components/restaurantCard';
 import Categories from '../../components/categories';
+import { log } from 'console';
+import { GetStaticProps } from 'next';
 
-const data: IRestaurant[] = getAllRestaurants();
+interface IRestaurant_list {
+    restaurant_list: IRestaurant[];
+}
 
-
-const CustomerHome: React.FC = () => {
+const CustomerHome: React.FC<IRestaurant_list> = ({ restaurant_list }) => {
     return (
         <Layout authentified>
             <div >
@@ -24,10 +27,11 @@ const CustomerHome: React.FC = () => {
                         </Grid>
                         <Grid item xs={10}>
                             <div className={styles.global}>
-                                {data.map(({ id, img, fav, rate, name, offer }: IRestaurant) => (
-                                    <RestaurantCard id={id} img={img} fav={fav} rate={rate} name={name} offer={offer} />
-                                )
-                                )}
+                                {
+                                    restaurant_list.map(({ _id, name, rate, fav, img, offer }: IRestaurant) => (
+                                        <RestaurantCard id={_id} name={name} rate={rate} fav={fav} img={img} offer={offer} />
+                                    ))
+                                }
                             </div>
                         </Grid>
                     </Grid>
@@ -37,6 +41,16 @@ const CustomerHome: React.FC = () => {
         </Layout>
 
     );
+}
+
+
+export const getStaticProps: GetStaticProps = async () => {
+    const restaurant_list = await getRestaurants();
+    return {
+        props: {
+            restaurant_list,
+        },
+    };
 }
 
 export default CustomerHome;

@@ -1,5 +1,5 @@
 .restaurantCard {
-    width: 325px;
+    width: 300px;
     margin: 10px;
     display: inline-block;
 }
@@ -11,5 +11,17 @@
 
 .typoTitle {
     white-space: nowrap;
+    font-size: 2em;
     text-overflow: ellipsis;
+}
+
+.headerPhoto {
+    background: url(https://d1ralsognjng37.cloudfront.net/6865c39c-39cb-416a-82bd-a7a597a3aeb7.jpeg) no-repeat center bottom;
+    height: 100px;
+    width: inherit;
+}
+
+.headerPhoto img {
+    width: 100%;
+    height: 100%;
 }

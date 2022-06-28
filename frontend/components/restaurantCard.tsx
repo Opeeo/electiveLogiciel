@@ -18,7 +18,7 @@ const RestaurantCard: NextPage<IRestaurantCard> = ({ id, name, img, rate, fav, o
 
     return (
         <Card className={styles.restaurantCard} >
-            <CardActionArea>
+            <CardActionArea href={'/customers/restaurant/' + id}>
                 <CardMedia
                     component="img"
                     height="140"
@@ -26,7 +26,7 @@ const RestaurantCard: NextPage<IRestaurantCard> = ({ id, name, img, rate, fav, o
                     alt={id}
                 />
                 <CardContent>
-                    <Typography variant="h5" className={styles.typoTitle}>
+                    <Typography className={styles.typoTitle}>
                         {name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
