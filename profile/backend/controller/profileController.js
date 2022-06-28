@@ -147,10 +147,17 @@ const generateToken = (payload) => {
     })
 }
 
-const getPermision = asyncHandler(async (profile) => {
+/*const getPermision = asyncHandler(async (profile) => {
     const role = await prisma.role.findUnique({where: {id: profile.role_id}});
     return String(role.name);
-});
+});*/
+
+const getPermission = asyncHandler(async (req, res) => {
+    const role = await prisma.role.findUnique({where: {id: req.params.id}});
+    res.status(200).json({
+        name: role.name,
+    })
+})
 
 module.exports = {
     getProfiles,
@@ -159,4 +166,5 @@ module.exports = {
     updateAProfile,
     deleteAProfile,
     loginUser,
+    getPermission,
 }

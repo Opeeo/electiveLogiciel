@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getProfiles, getAProfile, registerUser, updateAProfile, deleteAProfile, loginUser } = require('../controller/profileController');
+const { getProfiles, getAProfile, registerUser, updateAProfile, deleteAProfile, loginUser, getPermission } = require('../controller/profileController');
 const { getDeliveryman, getADeliveryman, createADeliveryman, updateADeliveryman, deleteADeliveryman } = require('../controller/deliverymanController');
 const { getConsumer, getAConsumer, createAConsumer, updateAConsumer, deleteAConsumer } = require('../controller/consumerController');
 const { getDeveloper, getADeveloper, createADeveloper, updateADeveloper, deleteADeveloper } = require('../controller/developerController');
@@ -13,6 +13,7 @@ const { createARole } = require("../controller/roleController");
 router.route('/profile/').get(getProfiles).post(registerUser);
 router.route('/profile/:id').get(getAProfile).put(updateAProfile).delete(deleteAProfile);
 router.route('/profile/login').post(loginUser);
+router.route('/profile/permissions/:id').get(getPermission);
 
 router.route('/profile/deliveryman/').get(getDeliveryman).post(createADeliveryman);
 router.route('/profile/deliveryman/:id').get(getADeliveryman).put(updateADeliveryman).delete(deleteADeliveryman);
