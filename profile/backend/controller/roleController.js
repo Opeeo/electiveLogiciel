@@ -21,6 +21,21 @@ const createARole = asyncHandler(async (req, res, next) => {
     res.status(201).json(role);
 });
 
+//@desc Get one role
+//@route GET /api/profile/role/:id
+//@access Private
+const getARole = asyncHandler(async (req, res, next) => {
+    const role = await prisma.role.findUnique({ where: {id: Number(req.params.id)} });
+
+    if(!role){
+        res.status(400);
+        throw new Error('Invalid role'); 
+    }
+    res.status(200).json(role);
+    
+});
+
 module.exports = {
     createARole,
+    getARole,
 }

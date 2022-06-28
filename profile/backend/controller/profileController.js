@@ -35,7 +35,7 @@ const getAProfile = asyncHandler(async (req, res, next) => {
 const registerUser = asyncHandler(async (req, res, next) => {
     if(!req.body.first_name || !req.body.email ||
         !req.body.last_name || !req.body.password ||
-        !req.body.phone_number || !req.body.role_id){
+        !req.body.phone_number || !req.body.roleId){
         res.status(400);
         throw new Error('Missing information');
     }
@@ -55,11 +55,15 @@ const registerUser = asyncHandler(async (req, res, next) => {
             last_name: req.body.last_name,
             password: hashedPassword,
             phone_number: req.body.phone_number,
-            role_id: Number(req.body.role_id),
+            roleId: Number(req.body.roleId),
         },
     });
-
-    let payload = { id: profile.id, permissions: [getPermision(profile)] };
+    const role = await prisma.role.findUnique({where: {id: profile.roleId}});
+    if(!role){
+        res.status(400);
+        throw new Error('Role not found');
+    }
+    let payload = { id: profile.id, permissions: role.name };
 
     if(profile){
         res.status(201).json({
@@ -69,7 +73,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
             last_name: profile.last_name,
             password: profile.password,
             phone_number: profile.phone_number,
-            role_id: profile.role_id,
+            roleId: profile.roleId,
             token: generateToken(payload),
         });
     }else {
@@ -96,6 +100,7 @@ const loginUser = asyncHandler(async (req, res) => {
             last_name: profile.last_name,
             password: profile.password,
             phone_number: profile.phone_number,
+            roleId: profile.roleId,
             token: generateToken(payload),
         });
     }else {
@@ -147,17 +152,12 @@ const generateToken = (payload) => {
     })
 }
 
-/*const getPermision = asyncHandler(async (profile) => {
+const getPermission = asyncHandler(async (profile) => {
     const role = await prisma.role.findUnique({where: {id: profile.role_id}});
     return String(role.name);
-});*/
+});
 
-const getPermission = asyncHandler(async (req, res) => {
-    const role = await prisma.role.findUnique({where: {id: req.params.id}});
-    res.status(200).json({
-        name: role.name,
-    })
-})
+
 
 module.exports = {
     getProfiles,
@@ -166,5 +166,4 @@ module.exports = {
     updateAProfile,
     deleteAProfile,
     loginUser,
-    getPermission,
 }
