@@ -27,29 +27,37 @@ model Profile{
   adressesOfProfile AdressesOfProfile[]
   sponsor Sponsorship[] @relation("sponsor")
   sponsored Sponsorship[] @relation("sponsored")
+  role Role @relation(fields: [roleId], references: [id])
+  roleId Int @unique
+}
+
+model Role{
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  profile Profile?
 }
 
 model Deliveryman{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
   vehicule_type String @db.VarChar(255)
 }
 
 model Consumer{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
-  delivery_notification Boolean @default(true)
-  promotionnal_notification Boolean @default(true)
-  promotionnal_email Boolean @default(true)
+  delivery_notification Boolean 
+  promotionnal_notification Boolean 
+  promotionnal_email Boolean 
 }
 
 model Developer{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
 }
 
 model Restaurator{
-  profileId Int
+  profileId Int @id
   Profile Profile @relation(fields: [profileId], references: [id])
 }
 
@@ -57,15 +65,13 @@ model Adress{
   id Int @id @default(autoincrement())
   street_number Int
   street_name String @db.VarChar(255)
-  building_number String? @db.VarChar(255)
+  building_number Int
   city String @db.VarChar(255)
-  postal_code Int
-  additionnal_adress String? @db.VarChar(255)
+  additionnal_adress String @db.VarChar(255)
   adressesOfProfile AdressesOfProfile[]
 }
 
 model AdressesOfProfile{
-  
   profileId Int
   Profile Profile @relation(fields: [profileId], references: [id])
   adressId Int
