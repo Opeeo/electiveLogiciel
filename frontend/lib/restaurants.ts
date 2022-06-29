@@ -1,22 +1,25 @@
-import restaurants from '../products/products.json';
 import axios from 'axios';
-var restaurantscp = restaurants
+
+import { useDispatch, useSelector } from '../store/store';
+import { getUserState, setEmail, setName, setToken } from '../store/slices/userSlice';
+
 
 export interface IRestaurant {
     _id: string;
     name: string;
     img: string;
-    rate: string;
-    fav: string;
     offer: string;
 }
 
 
 //Get all restaurants with axios typescript
-export const getRestaurants = async () => {
-    console.log('here');
+export const getRestaurants = async (token: string) => {
 
-    const response = await axios.get('http://localhost:8080/api/restaurant/');
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+    const response = await axios.get('http://localhost:8080/api/restaurant/', config);
     const data: IRestaurant[] = response.data;
     return data;
 }
