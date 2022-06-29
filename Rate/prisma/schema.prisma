@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native", "windows"]
@@ -8,76 +11,80 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Adress {
-  id                 Int                 @id @default(autoincrement())
-  street_number      Int
-  street_name        String              @db.VarChar(255)
-  building_number    String?             @db.VarChar(255)
-  city               String              @db.VarChar(255)
-  additionnal_adress String?             @db.VarChar(255)
-  postal_code        Int
-  AdressesOfProfile  AdressesOfProfile[]
+model Profile{
+  id Int @id @default(autoincrement())
+  last_name String @db.VarChar(255)
+  first_name String @db.VarChar(255)
+  email String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+  phone_number String @db.VarChar(255)
+  birthday DateTime @default(now())
+  deletedAt DateTime?
+  deliveryman Deliveryman?
+  consumer Consumer?
+  developer Developer?
+  restaurator Restaurator?
+  adressesOfProfile AdressesOfProfile[]
+  sponsor Sponsorship[] @relation("sponsor")
+  sponsored Sponsorship[] @relation("sponsored")
+  role_id Int
+  Role Role @relation(fields: [role_id], references: [id])
 }
 
-model AdressesOfProfile {
-  profileId  Int
-  adressId   Int
+model Deliveryman{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+  vehicule_type String @db.VarChar(255)
+}
+
+model Consumer{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+  delivery_notification Boolean 
+  promotionnal_notification Boolean 
+  promotionnal_email Boolean 
+}
+
+model Developer{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+}
+
+model Restaurator{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+}
+
+model Adress{
+  id Int @id @default(autoincrement())
+  street_number Int
+  street_name String @db.VarChar(255)
+  building_number Int
+  city String @db.VarChar(255)
+  additionnal_adress String @db.VarChar(255)
+  adressesOfProfile AdressesOfProfile[]
+}
+
+model AdressesOfProfile{
+  profileId Int
+  Profile Profile @relation(fields: [profileId], references: [id])
+  adressId Int
+  adress Adress @relation(fields: [adressId], references: [id])
   assignedAt DateTime @default(now())
-  Adress     Adress   @relation(fields: [adressId], references: [id])
-  Profile    Profile  @relation(fields: [profileId], references: [id])
 
   @@id([profileId, adressId])
-  @@index([adressId], map: "AdressesOfProfile_adressId_fkey")
 }
 
-model Consumer {
-  profileId                 Int     @unique
-  delivery_notification     Boolean @default(true)
-  promotionnal_notification Boolean @default(true)
-  promotionnal_email        Boolean @default(true)
-  Profile                   Profile @relation(fields: [profileId], references: [id])
+model Sponsorship{
+  sponsorId Int
+  Sponsor Profile @relation("sponsor", fields: [sponsorId], references: [id])
+  sponsoredId Int @unique
+  Sponsored Profile @relation("sponsored", fields: [sponsoredId], references: [id])
+  sponsorship_date DateTime @default(now())
 }
 
-model Deliveryman {
-  profileId     Int     @unique
-  vehicule_type String  @db.VarChar(255)
-  Profile       Profile @relation(fields: [profileId], references: [id])
-}
-
-model Developer {
-  profileId Int     @unique
-  Profile   Profile @relation(fields: [profileId], references: [id])
-}
-
-model Profile {
-  id                                           Int                 @id @default(autoincrement())
-  last_name                                    String              @db.VarChar(255)
-  first_name                                   String              @db.VarChar(255)
-  email                                        String              @unique @db.VarChar(255)
-  password                                     String              @db.VarChar(255)
-  phone_number                                 String              @db.VarChar(255)
-  deletedAt                                    DateTime?
-  birthday                                     DateTime            @default(now())
-  AdressesOfProfile                            AdressesOfProfile[]
-  Consumer                                     Consumer?
-  Deliveryman                                  Deliveryman?
-  Developer                                    Developer?
-  Restaurator                                  Restaurator?
-  Sponsorship_ProfileToSponsorship_sponsorId   Sponsorship[]       @relation("ProfileToSponsorship_sponsorId")
-  Sponsorship_ProfileToSponsorship_sponsoredId Sponsorship?        @relation("ProfileToSponsorship_sponsoredId")
-}
-
-model Restaurator {
-  profileId Int     @unique
-  Profile   Profile @relation(fields: [profileId], references: [id])
-}
-
-model Sponsorship {
-  sponsorId                                Int
-  sponsoredId                              Int      @unique
-  sponsorship_date                         DateTime @default(now())
-  Profile_ProfileToSponsorship_sponsorId   Profile  @relation("ProfileToSponsorship_sponsorId", fields: [sponsorId], references: [id])
-  Profile_ProfileToSponsorship_sponsoredId Profile  @relation("ProfileToSponsorship_sponsoredId", fields: [sponsoredId], references: [id])
-
-  @@index([sponsorId], map: "Sponsorship_sponsorId_fkey")
+model Role{
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  profile Profile?
 }

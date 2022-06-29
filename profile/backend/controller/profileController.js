@@ -1,8 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require('@prisma/client');
 const { now } = require("mongoose");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient()
+const refreshtokens = [];
 
 //@desc Get profiles
 //@route GET /api/profile/
@@ -27,28 +30,77 @@ const getAProfile = asyncHandler(async (req, res, next) => {
 
 });
 
-//@desc Create a profile
+//@desc Register a user
 //@route POST /api/profile/
 //@access Private
-const creatAProfile = asyncHandler(async (req, res, next) => {
-    if (!req.body.first_name || !req.body.email ||
+const registerUser = asyncHandler(async (req, res, next) => {
+    if(!req.body.first_name || !req.body.email ||
         !req.body.last_name || !req.body.password ||
-        !req.body.phone_number) {
+        !req.body.phone_number || !req.body.roleId){
         res.status(400);
         throw new Error('Missing information');
     }
+
+    if(await prisma.profile.findUnique({ where: {email: req.body.email } })){
+        res.status(400);
+        throw new Error('Profile already exist');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const profile = await prisma.profile.create({
         data: {
             email: req.body.email,
             first_name: req.body.first_name,
             last_name: req.body.last_name,
-            password: req.body.password,
+            password: hashedPassword,
             phone_number: req.body.phone_number,
+            roleId: Number(req.body.roleId),
         },
     });
 
-    res.status(201).json(profile);
+    if(profile){
+        res.status(201).json({
+            _id: profile.id,
+            email: profile.email,
+            first_name: profile.first_name,
+            last_name: profile.last_name,
+            password: profile.password,
+            phone_number: profile.phone_number,
+            roleId: profile.roleId,
+            token: generateToken(profile.id),
+        });
+    }else {
+        res.status(400);
+        throw new Error('Invalid user data');
+    }
+});
+
+//@desc login a profile
+//@route POST /api/profile/login
+//@access Public
+const loginUser = asyncHandler(async (req, res) => {
+
+    const profile = await prisma.profile.findUnique({ where: {email: req.body.email } });
+
+    if(profile && (await bcrypt.compare(req.body.password, profile.password))){
+        let token = generateToken(profile.id);
+        const data = {
+            _id: profile.id,
+            email: profile.email,
+            first_name: profile.first_name,
+            last_name: profile.last_name,
+            password: profile.password,
+            phone_number: profile.phone_number,
+            roleId: profile.roleId,
+            token: token,
+        }
+        res.status(201).json({data});
+    }else {
+        res.status(400);
+        throw new Error('Invalid credentials');
+    }
 });
 
 //@desc update an profile
@@ -92,10 +144,21 @@ const deleteAProfile = asyncHandler(async (req, res, next) => {
     res.status(200).json(deletedProfile);
 });
 
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '20m',
+    })
+}
+
+const generateRefreshToken = (id) => {
+    return jwt.sign({ id }, process.env.REFRESH_SECRET)
+}
+
 module.exports = {
     getProfiles,
     getAProfile,
-    creatAProfile,
+    registerUser,
     updateAProfile,
-    deleteAProfile
+    deleteAProfile,
+    loginUser,
 }

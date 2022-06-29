@@ -44,6 +44,8 @@ const createAConsumer = asyncHandler(async (req, res, next) => {
         data: {
             profileId: Number(req.body.profile_id),
             delevery_notification: Boolean(req.body.delevery_notification),
+            promotionnal_notification: Boolean(req.body.promotionnal_notification),
+            promotionnal_email: Boolean(req.body.promotionnal_notification)
         },
     });
 
