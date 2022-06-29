@@ -19,72 +19,72 @@ model Profile{
   password String @db.VarChar(255)
   phone_number String @db.VarChar(255)
   birthday DateTime @default(now())
-  deletedAt DateTime?
+  deleted_at DateTime?
   deliveryman Deliveryman?
   consumer Consumer?
   developer Developer?
   restaurator Restaurator?
-  adressesOfProfile AdressesOfProfile[]
+  adresses_profile AdressesOfProfile[]
   sponsor Sponsorship[] @relation("sponsor")
   sponsored Sponsorship[] @relation("sponsored")
-  role Role @relation(fields: [roleId], references: [id])
-  roleId Int @unique
+  role_id Int
+  Role Role @relation(fields: [role_id], references: [id])
+}
+
+model Deliveryman{
+  profile_id Int
+  Profile Profile @relation(fields: [profile_id], references: [id])
+  vehicule_type String @db.VarChar(255)
+}
+
+model Consumer{
+  profile_id Int
+  Profile Profile @relation(fields: [profile_id], references: [id])
+  delivery_notification Boolean 
+  promotional_notification Boolean 
+  promotional_email Boolean 
+}
+
+model Developer{
+  profile_id Int
+  Profile Profile @relation(fields: [profile_id], references: [id])
+}
+
+model RestaurantOwner{
+  profile_id Int
+  Profile Profile @relation(fields: [profile_id], references: [id])
+}
+
+model Address{
+  id Int @id @default(autoincrement())
+  street_number Int
+  street_name String @db.VarChar(255)
+  building_number Int
+  city String @db.VarChar(255)
+  additional_adress String @db.VarChar(255)
+  addresses_profile AddressesOfProfile[]
+}
+
+model AddressesOfProfile{
+  profile_id Int
+  Profile Profile @relation(fields: [profile_id], references: [id])
+  address_id Int
+  address Address @relation(fields: [address_id], references: [id])
+  assigned_at DateTime @default(now())
+
+  @@id([profile_id, address_id])
+}
+
+model Sponsorship{
+  sponsor_id Int
+  Sponsor Profile @relation("sponsor", fields: [sponsor_id], references: [id])
+  sponsored_id Int @unique
+  Sponsored Profile @relation("sponsored", fields: [sponsored_id], references: [id])
+  sponsorship_date DateTime @default(now())
 }
 
 model Role{
   id Int @id @default(autoincrement())
   name String @db.VarChar(255)
   profile Profile?
-}
-
-model Deliveryman{
-  profileId Int @id
-  Profile Profile @relation(fields: [profileId], references: [id])
-  vehicule_type String @db.VarChar(255)
-}
-
-model Consumer{
-  profileId Int @id
-  Profile Profile @relation(fields: [profileId], references: [id])
-  delivery_notification Boolean 
-  promotionnal_notification Boolean 
-  promotionnal_email Boolean 
-}
-
-model Developer{
-  profileId Int @id
-  Profile Profile @relation(fields: [profileId], references: [id])
-}
-
-model Restaurator{
-  profileId Int @id
-  Profile Profile @relation(fields: [profileId], references: [id])
-}
-
-model Adress{
-  id Int @id @default(autoincrement())
-  street_number Int
-  street_name String @db.VarChar(255)
-  building_number Int
-  city String @db.VarChar(255)
-  additionnal_adress String @db.VarChar(255)
-  adressesOfProfile AdressesOfProfile[]
-}
-
-model AdressesOfProfile{
-  profileId Int
-  Profile Profile @relation(fields: [profileId], references: [id])
-  adressId Int
-  adress Adress @relation(fields: [adressId], references: [id])
-  assignedAt DateTime @default(now())
-
-  @@id([profileId, adressId])
-}
-
-model Sponsorship{
-  sponsorId Int
-  Sponsor Profile @relation("sponsor", fields: [sponsorId], references: [id])
-  sponsoredId Int @unique
-  Sponsored Profile @relation("sponsored", fields: [sponsoredId], references: [id])
-  sponsorship_date DateTime @default(now())
 }

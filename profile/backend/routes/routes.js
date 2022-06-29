@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { protect, IsConsumer, IsDeliveryman, IsDeveloper, IsRestaurator } = require('../middleware/authMiddleware');
+const { protect, IsConsumer, IsDeliveryman, IsDeveloper, IsRestaurantOwner } = require('../middleware/authMiddleware');
 
 const { getProfiles, getAProfile, registerUser, updateAProfile, deleteAProfile, loginUser } = require('../controller/profileController');
 const { getDeliveryman, getADeliveryman, createADeliveryman, updateADeliveryman, deleteADeliveryman } = require('../controller/deliverymanController');
@@ -25,8 +25,8 @@ router.route('/profile/consumer/:id').get(protect, IsConsumer, getAConsumer).put
 router.route('/profile/developer/').get(protect, IsDeveloper, getDeveloper).post(createADeveloper);
 router.route('/profile/developer/:id').get(protect, IsDeveloper, getADeveloper).put(protect, IsDeveloper, updateADeveloper).delete(protect, IsDeveloper, deleteADeveloper);
 
-router.route('/profile/restaurator/').get(protect, IsRestaurator, getRestaurator).post(createARestaurator);
-router.route('/profile/restaurator/:id').get(protect, IsRestaurator, getARestaurator).put(protect, IsRestaurator, updateARestaurator).delete(protect, IsRestaurator, deleteARestaurator);
+router.route('/profile/restaurator/').get(protect, IsRestaurantOwner, getRestaurator).post(createARestaurator);
+router.route('/profile/restaurator/:id').get(protect, IsRestaurantOwner, getARestaurator).put(protect, IsRestaurantOwner, updateARestaurator).delete(protect, IsRestaurantOwner, deleteARestaurator);
 
 router.route('/profile/sponsorship/sponsor/:id').get(protect, getASponsorOfAProfile);
 router.route('/profile/sponsorship/sponsored/:id').get(protect, getSponsoredProfile);

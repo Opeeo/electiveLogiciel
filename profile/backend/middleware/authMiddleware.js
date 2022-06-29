@@ -5,12 +5,12 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 const protect = asyncHandler(async(req, res, next) => {
-    let token
+    let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         try {
-            token = req.headers.authorization.split(' ')[1]
+            token = req.headers.authorization.split(' ')[1];
 
-            const decoded = jwt.verify(token, process.env.JWT_SECRET)
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
             req.user = await prisma.profile.findUnique({ where: {id: Number(decoded.id)} });
 
@@ -32,10 +32,10 @@ const IsConsumer = asyncHandler(async (req, res, next) => {
     const role = await prisma.role.findUnique({where: {id: Number(req.user.roleId)}});
     if(role){
         if(role.name == "consumer"){
-            res.status(200)
+            res.status(200);
             next();
         }else{
-            res.status(401)
+            res.status(401);
             throw new Error('Not authorized, not consumer');
         }
     }
@@ -44,10 +44,10 @@ const IsDeliveryman = asyncHandler(async (req, res, next) => {
     const role = await prisma.role.findUnique({where: {id: Number(req.user.roleId)}});
     if(role){
         if(role.name == "deliveryman"){
-            res.status(200)
+            res.status(200);
             next();
         }else{
-            res.status(401)
+            res.status(401);
             throw new Error('Not authorized, not deliveryman');
         }
     }
@@ -56,22 +56,22 @@ const IsDeveloper = asyncHandler(async (req, res, next) => {
     const role = await prisma.role.findUnique({where: {id: Number(req.user.roleId)}});
     if(role){
         if(role.name == "developer"){
-            res.status(200)
+            res.status(200);
             next();
         }else{
-            res.status(401)
+            res.status(401);
             throw new Error('Not authorized, not developer');
         }
     }
 });
-const IsRestaurator = asyncHandler(async (req, res, next) => {
+const IsRestaurantOwner = asyncHandler(async (req, res, next) => {
     const role = await prisma.role.findUnique({where: {id: Number(req.user.roleId)}});
     if(role){
-        if(role.name == "restaurator"){
-            res.status(200)
+        if(role.name == "restaurant_owner"){
+            res.status(200);
             next();
         }else{
-            res.status(401)
+            res.status(401);
             throw new Error('Not authorized, not restaurator');
         }
     }
@@ -83,5 +83,5 @@ module.exports = {
     IsConsumer,
     IsDeliveryman,
     IsDeveloper,
-    IsRestaurator,
+    IsRestaurantOwner,
 }

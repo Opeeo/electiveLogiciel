@@ -3,23 +3,23 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient()
 
-//@desc Get restaurator
-//@route GET /api/profile/restaurator/
+//@desc Get restaurant owner
+//@route GET /api/profile/restaurantowner/
 //@access Private
-const getRestaurator = asyncHandler(async (req, res, next) => {
-    const restaurator = await prisma.restaurator.findMany();
+const getRestaurantOwner = asyncHandler(async (req, res, next) => {
+    const restaurantowner = await prisma.restaurantowner.findMany();
 
-    res.status(200).json(restaurator);
+    res.status(200).json(restaurantowner);
 });
 
-//@desc Get one restaurator
-//@route GET /api/profile/restaurator/:id
+//@desc Get one restaurant owner
+//@route GET /api/profile/restaurantowner/:id
 //@access Private
-const getARestaurator = asyncHandler(async (req, res, next) => {
+const getARestaurantOwner = asyncHandler(async (req, res, next) => {
 
-    const restaurator = await prisma.restaurator.findUnique({ where: {profileId: Number(req.params.id)}})
+    const restaurantowner = await prisma.restaurantowner.findUnique({ where: {profile_id: Number(req.params.id)}})
 
-    if(!restaurator){
+    if(!restaurantowner){
         res.status(400)
         throw new Error('Invalid restaurator')
     }
