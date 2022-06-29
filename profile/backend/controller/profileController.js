@@ -1,4 +1,4 @@
-const asyncHandler = require ("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require('@prisma/client');
 const { now } = require("mongoose");
 
@@ -17,23 +17,23 @@ const getProfiles = asyncHandler(async (req, res, next) => {
 //@route GET /api/profile/:id
 //@access Private
 const getAProfile = asyncHandler(async (req, res, next) => {
-    const profile = await prisma.profile.findUnique({ where: {id: Number(req.params.id)} });
+    const profile = await prisma.profile.findUnique({ where: { id: Number(req.params.id) } });
 
-    if(!profile){
+    if (!profile) {
         res.status(400);
-        throw new Error('Invalid profile'); 
+        throw new Error('Invalid profile');
     }
     res.status(200).json(profile);
-    
+
 });
 
 //@desc Create a profile
 //@route POST /api/profile/
 //@access Private
 const creatAProfile = asyncHandler(async (req, res, next) => {
-    if(!req.body.first_name || !req.body.email ||
+    if (!req.body.first_name || !req.body.email ||
         !req.body.last_name || !req.body.password ||
-        !req.body.phone_number){
+        !req.body.phone_number) {
         res.status(400);
         throw new Error('Missing information');
     }
@@ -56,18 +56,19 @@ const creatAProfile = asyncHandler(async (req, res, next) => {
 //@access Private
 const updateAProfile = asyncHandler(async (req, res, next) => {
 
-    const profile = await prisma.profile.findUnique({ where: {id: Number(req.params.id)} });
+    const profile = await prisma.profile.findUnique({ where: { id: Number(req.params.id) } });
 
-    if(!profile){
+    if (!profile) {
         res.status(400);
         throw new Error('Profile not found');
     }
 
     const updatedProfile = await prisma.profile.update({
         where: {
-            id:  Number(req.params.id)
+            id: Number(req.params.id)
         },
-        data: req.body});
+        data: req.body
+    });
 
     res.status(200).json(updatedProfile);
 });
@@ -77,16 +78,19 @@ const updateAProfile = asyncHandler(async (req, res, next) => {
 //@access Private
 const deleteAProfile = asyncHandler(async (req, res, next) => {
 
-    if(!await prisma.profile.findUnique({ where: {id: Number(req.params.id)} })){
+    if (!await prisma.profile.findUnique({ where: { id: Number(req.params.id) } })) {
         res.status(400);
         throw new Error('Restaurant not found');
     }
 
-    const deletedProfile = await prisma.profile.update({ where: {id: Number(req.params.id)}, data: {
-        deletedAt: now()} });
+    const deletedProfile = await prisma.profile.update({
+        where: { id: Number(req.params.id) }, data: {
+            deletedAt: now()
+        }
+    });
 
     res.status(200).json(deletedProfile);
-});        
+});
 
 module.exports = {
     getProfiles,
