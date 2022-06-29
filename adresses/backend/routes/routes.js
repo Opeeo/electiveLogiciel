@@ -5,11 +5,13 @@ const { getAdresses, getAnAdress, creatAnAdress, updateAnAdress, deleteAnAdress 
 
 const { getAdressesByProfile, giveAnAdress, removeAnAdress } = require("../controller/giveAdressController");
 
-router.route('/adress/').get(getAdresses).post(creatAnAdress);
-router.route('/adress/:id').get(getAnAdress).put(updateAnAdress).delete(deleteAnAdress);
+const { protect, IsConsumer, IsDeliveryman, IsDeveloper, IsRestaurator } = require('../middleware/authMiddleware')
 
-router.route('/adress/profile/:id').get(getAdressesByProfile);
-router.route('/adress/profile/').post(giveAnAdress).delete(removeAnAdress);
+router.route('/adress/').get(protect, getAdresses).post(protect, creatAnAdress);
+router.route('/adress/:id').get(protect, getAnAdress).put(protect, updateAnAdress).delete(protect, deleteAnAdress);
+
+router.route('/adress/profile/:id').get(protect, getAdressesByProfile);
+router.route('/adress/profile/').post(protect, giveAnAdress).delete(protect, removeAnAdress);
 
 
 module.exports = router;

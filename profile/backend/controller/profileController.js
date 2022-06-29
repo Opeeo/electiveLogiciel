@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient()
+const refreshtokens = [];
 
 //@desc Get profiles
 //@route GET /api/profile/
@@ -58,12 +59,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
             roleId: Number(req.body.roleId),
         },
     });
-    const role = await prisma.role.findUnique({where: {id: profile.roleId}});
-    if(!role){
-        res.status(400);
-        throw new Error('Role not found');
-    }
-    let payload = { id: profile.id, permissions: [role.name] };
 
     if(profile){
         res.status(201).json({
@@ -74,7 +69,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
             password: profile.password,
             phone_number: profile.phone_number,
             roleId: profile.roleId,
-            token: generateToken(payload),
+            token: generateToken(profile.id),
         });
     }else {
         res.status(400);
@@ -88,15 +83,10 @@ const registerUser = asyncHandler(async (req, res, next) => {
 const loginUser = asyncHandler(async (req, res) => {
 
     const profile = await prisma.profile.findUnique({ where: {email: req.body.email } });
-    const role = await prisma.role.findUnique({where: {id: profile.roleId}});
-    if(!role){
-        res.status(400);
-        throw new Error('Role not found');
-    }
-    let payload = { id: profile.id, permissions: [role.name] };
 
     if(profile && (await bcrypt.compare(req.body.password, profile.password))){
-        res.status(201).json({
+        let token = generateToken(profile.id);
+        const data = {
             _id: profile.id,
             email: profile.email,
             first_name: profile.first_name,
@@ -104,8 +94,9 @@ const loginUser = asyncHandler(async (req, res) => {
             password: profile.password,
             phone_number: profile.phone_number,
             roleId: profile.roleId,
-            token: generateToken(payload),
-        });
+            token: token,
+        }
+        res.status(201).json({data});
     }else {
         res.status(400);
         throw new Error('Invalid credentials');
@@ -149,10 +140,14 @@ const deleteAProfile = asyncHandler(async (req, res, next) => {
     res.status(200).json(deletedProfile);
 });        
 
-const generateToken = (payload) => {
-    return jwt.sign({ payload }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '20m',
     })
+}
+
+const generateRefreshToken = (id) => {
+    return jwt.sign({ id }, process.env.REFRESH_SECRET)
 }
 
 module.exports = {
