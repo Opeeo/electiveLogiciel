@@ -9,6 +9,16 @@ const { getMenus, createAMenu, updateAMenu, deleteAMenu } = require('../controll
 
 const { protect, IsConsumer, IsDeliveryman, IsDeveloper, IsRestaurator } = require('../middleware/authMiddleware');
 
+/**
+ * @swagger
+ * /restaurant:
+ *      get:
+ *          description: Get all profiles
+ *          response: 
+ *              200:
+ *                  description: Success
+ *      
+ */
 //Routers for restaurant
 router.route('/restaurant/').get(protect, IsRestaurator, getRestaurants).post(protect, IsRestaurator, createARestaurant);
 router.route('/restaurant/:id').get(protect, IsRestaurator, getARestaurant).put(protect, IsRestaurator, updateARestaurant).delete(protect, IsRestaurator, deleteARestaurant);
