@@ -2,11 +2,11 @@ const express = require('express');
 const dotenv = require('dotenv').config;
 const { errorHandler } = require("./middleware/errorMiddleware");
 const connectDB = require("./config/db");
-const cors = require('cors')
 const port = 3000;
 const cors = require('cors');
 
 const app = express();
+
 app.use(cors({origin: "http://localhost:3000"}));
 
 const http = require('http');

@@ -11,7 +11,16 @@ const { getRestaurator, getARestaurator, createARestaurator, updateARestaurator,
 const { getASponsorOfAProfile, getSponsoredProfile, createASponsorship, removeASponsorship } = require("../controller/sponsorshipController");
 const { createARole, getARole } = require("../controller/roleController");
 
-
+/**
+ * @swagger
+ * /profile:
+ *      get:
+ *          description: Get all profiles
+ *          response: 
+ *              200:
+ *                  description: Success
+ *      
+ */
 router.route('/profile/').get(protect, getProfiles).post(registerUser);
 router.route('/profile/:id').get(protect, getAProfile).put(protect, updateAProfile).delete(protect, deleteAProfile);
 router.route('/profile/login').post(loginUser);
