@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import mongoose from 'mongoose';
 import Title from './Title';
 //import order from '../lib/order';
-import { getOrdersByRestaurant, acceptOrder, IOrder, deleteOrder, receiveOrder, socket } from '../lib/orders';
+import { getOrdersByDeliveryman, acceptOrder, IOrder, deleteOrder, receiveOrder } from '../lib/orders';
 import { GetStaticProps } from 'next';
 import { idText } from 'typescript';
 import Moment from 'moment';
@@ -31,20 +31,13 @@ const OrderList : React.FC<IOrders_list> = ({ restaurantId }) => {
     
 
     React.useEffect(() => {
-        socket.on("NewOrder"+restaurantId, () => {
-            getOrdersByRestaurant(restaurantId, token).then(res => {
-            var temp:IOrder[] = [];
-            res.forEach(element => {
-                if(!element.delivered){
-                    temp.push(element);
-                }
-            });
-            setData(temp);
-        });});
+        /* socket.on("OrderToFulfill", () => {
+            
+        }); */
     }, []);  
 
     React.useEffect(() => {
-        getOrdersByRestaurant(restaurantId, token).then(res => {
+        getOrdersByDeliveryman(restaurantId, token).then(res => {
             var temp:IOrder[] = [];
             res.forEach(element => {
                 if(!element.delivered){
@@ -91,9 +84,7 @@ function refreshPage() {
                             <TableCell align="right"><Button variant="contained" onClick={() => {deleteOrder(order._id, token).then(res => refreshPage())}}>Decline</Button></TableCell>
                         </div>)
                         : (order.received_by_deliveryman ? <TableCell align="right">
-                    <img 
-                        src={'https://cdn-icons.flaticon.com/png/512/5637/premium/5637217.png?token=exp=1656621275~hmac=70d777588fc5d9a7bfb6914144f2a28d'}
-                        alt="Canvas Logo"
+                    <img src={'/images/delivery_image/fast-delivery.png'}
                         style={{width: '4em', height: '4em'}}/>
                     </TableCell> 
                     : <TableCell align="right"><Button variant="contained" onClick={() => {receiveOrder(order._id, token).then(res => refreshPage())}}>Give to deliveryman</Button></TableCell>)}

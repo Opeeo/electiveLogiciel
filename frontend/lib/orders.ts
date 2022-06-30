@@ -66,5 +66,15 @@ export const receiveOrder = async (id: string, token: string) => {
     return data;
 }
 
+//Get orders by deliveryman id with axios and typescript
+export const getOrdersByDeliveryman = async (id: string, token: string) => {
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`http://localhost:8080/api/order/deliveryman/${id}`, config);
+    const data: IOrder[] = response.data;
+    return data;
+}
+
 
 
