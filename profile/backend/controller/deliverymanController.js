@@ -1,4 +1,4 @@
-const asyncHandler = require ("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient()
@@ -17,8 +17,8 @@ const getDeliveryman = asyncHandler(async (req, res, next) => {
 //@access Private
 const getADeliveryman = asyncHandler(async (req, res, next) => {
 
-    const deliveryman = await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}})
-    if(!deliveryman){
+    const deliveryman = await prisma.deliveryman.findUnique({ where: { profileId: Number(req.params.id) } })
+    if (!deliveryman) {
         res.status(400)
         throw new Error('Invalid deliveryman')
     }
@@ -30,18 +30,18 @@ const getADeliveryman = asyncHandler(async (req, res, next) => {
 //@route POST /api/profile/deliveryman/
 //@access Private
 const createADeliveryman = asyncHandler(async (req, res, next) => {
-    if(!req.body.profile_id){
+    if (!req.body.profileId) {
         res.status(400);
         throw new Error('Missing information');
     }
-    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })){
+    if (!await prisma.profile.findUnique({ where: { id: Number(req.body.profileId) } })) {
         res.status(400)
         throw new Error('Invalid profile')
     }
 
     const deliveryman = await prisma.deliveryman.create({
         data: {
-            profileId: Number(req.body.profile_id),
+            profileId: Number(req.body.profileId),
             vehicule_type: req.body.vehicule_type,
         },
     });
@@ -54,16 +54,17 @@ const createADeliveryman = asyncHandler(async (req, res, next) => {
 //@access Private
 const updateADeliveryman = asyncHandler(async (req, res, next) => {
 
-    if(!await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}})){
+    if (!await prisma.deliveryman.findUnique({ where: { profileId: Number(req.params.id) } })) {
         res.status(400);
         throw new Error('Deliveryman not found');
     }
 
     const updatedDeliveryman = await prisma.deliveryman.update({
         where: {
-            profileId:  Number(req.params.id),
+            profileId: Number(req.params.id),
         },
-        data: req.body});
+        data: req.body
+    });
 
     res.status(200).json(updatedDeliveryman);
 });
@@ -73,14 +74,14 @@ const updateADeliveryman = asyncHandler(async (req, res, next) => {
 //@access Private
 const deleteADeliveryman = asyncHandler(async (req, res, next) => {
 
-    if(!await prisma.deliveryman.findUnique({ where: {profileId: Number(req.params.id)}})){
+    if (!await prisma.deliveryman.findUnique({ where: { profileId: Number(req.params.id) } })) {
         res.status(400);
         throw new Error('Deliveryman not found');
     }
-    const deletedDeliveryman = await prisma.deliveryman.delete({where: {profileId: Number(req.params.id)}});
+    const deletedDeliveryman = await prisma.deliveryman.delete({ where: { profileId: Number(req.params.id) } });
 
     res.status(200).json(deletedProfile);
-}); 
+});
 
 module.exports = {
     getDeliveryman,

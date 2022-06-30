@@ -10,7 +10,7 @@ const orderSchema = mongoose.Schema({
         required: [true, "price required"]
     },
     articles: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [String],
         required: [true, "articles required"]
     },
     menu: [mongoose.Schema.Types.ObjectId],

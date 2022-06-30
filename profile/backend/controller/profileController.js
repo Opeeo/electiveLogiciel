@@ -34,15 +34,15 @@ const getAProfile = asyncHandler(async (req, res, next) => {
 //@route POST /api/profile/
 //@access Private
 const registerUser = asyncHandler(async (req, res, next) => {
-    if(!req.body.first_name || !req.body.email ||
+    if (!req.body.first_name || !req.body.email ||
         !req.body.last_name || !req.body.password ||
-        !req.body.phone_number || !req.body.roleId){
+        !req.body.phone_number || !req.body.roleId) {
         res.status(400);
         throw new Error('Missing information');
     }
-    const alreadyExits = await prisma.profile.findUnique({ where: {email: req.body.email } })
+    const alreadyExits = await prisma.profile.findUnique({ where: { email: req.body.email } })
 
-    if(alreadyExits){
+    if (alreadyExits) {
         res.status(400);
         throw new Error('Profile already exist');
     }
@@ -61,7 +61,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         },
     });
 
-    if(profile){
+    if (profile) {
         res.status(201).json({
             profileId: profile.id,
             email: profile.email,
@@ -72,7 +72,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
             roleId: profile.roleId,
             token: generateToken(profile.id),
         });
-    }else {
+    } else {
         res.status(400);
         throw new Error('Invalid user data');
     }
@@ -83,12 +83,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
 //@access Public
 const loginUser = asyncHandler(async (req, res) => {
 
-    const profile = await prisma.profile.findUnique({ where: {email: req.body.email } });
+    const profile = await prisma.profile.findUnique({ where: { email: req.body.email } });
 
-    if(profile && (await bcrypt.compare(req.body.password, profile.password))){
+    if (profile && (await bcrypt.compare(req.body.password, profile.password))) {
         let token = generateToken(profile.id);
         const data = {
-            _id: profile.id,
+            profileId: profile.id,
             email: profile.email,
             first_name: profile.first_name,
             last_name: profile.last_name,
@@ -98,7 +98,7 @@ const loginUser = asyncHandler(async (req, res) => {
             token: token,
         }
         res.status(201).json(data);
-    }else {
+    } else {
         res.status(400);
         throw new Error('Invalid credentials');
     }
