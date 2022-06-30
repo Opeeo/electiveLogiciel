@@ -40,8 +40,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
         res.status(400);
         throw new Error('Missing information');
     }
+    const alreadyExits = await prisma.profile.findUnique({ where: {email: req.body.email } })
 
-    if(await prisma.profile.findUnique({ where: {email: req.body.email } })){
+    if(alreadyExits){
         res.status(400);
         throw new Error('Profile already exist');
     }
@@ -62,7 +63,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
     if(profile){
         res.status(201).json({
-            _id: profile.id,
+            profileId: profile.id,
             email: profile.email,
             first_name: profile.first_name,
             last_name: profile.last_name,
@@ -96,7 +97,7 @@ const loginUser = asyncHandler(async (req, res) => {
             roleId: profile.roleId,
             token: token,
         }
-        res.status(201).json({data});
+        res.status(201).json(data);
     }else {
         res.status(400);
         throw new Error('Invalid credentials');
