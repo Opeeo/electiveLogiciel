@@ -1,5 +1,6 @@
 const asyncHandler = require ("express-async-handler");
 const Order = require("../models/orderModel");
+const Restaurant = require("../models/restaurantModel");
 
 //@desc Get orders of a restaurant
 //@route GET /api/order/:id_restaurant
@@ -35,7 +36,8 @@ const createOrder = asyncHandler(async (req, res, next) => {
     if(!req.body.price 
         || !req.body.articles
         || !req.body.adress 
-        || !req.body.id_consumer) {
+        || !req.body.id_consumer
+        || !req.body.id_restaurant) {
         res.status(400);
         throw new Error('Missing informations');
     }
@@ -44,8 +46,10 @@ const createOrder = asyncHandler(async (req, res, next) => {
 
     const io = req.app.get("io");
     const users = req.app.get("users");
-    console.log(order);
-    io.to(users[users.length-1].id).emit("new_order", order);
+
+    const restaurant = await Restaurant.find({"id_restaurant": req.params.id_restaurant});
+
+    io.to(users[restaurant.id_restaurator]).emit("new_order", order);
 
     res.status(201).json(order);
 });

@@ -27,7 +27,10 @@ const orderSchema = mongoose.Schema({
         type: Boolean,
         default: false
     } ,
-    id_restaurant: mongoose.Schema.Types.ObjectId,
+    id_restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "id_consumer required"]
+    },
     id_consumer: {
         type: Number,
         required: [true, "id_consumer required"]
