@@ -32,19 +32,19 @@ const getARestaurator = asyncHandler(async (req, res, next) => {
 //@route POST /api/profile/restaurator/
 //@access Private
 const createARestaurator = asyncHandler(async (req, res, next) => {
-    if(!req.body.profile_id){
+    if(!req.body.profileId){
         res.status(400);
         throw new Error('Missing information');
     }
     
-    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.profile_id)} })){
+    if(!await prisma.profile.findUnique({ where: {id: Number(req.body.profileId)} })){
         res.status(400)
         throw new Error('Invalid profile')
     }
 
     const restaurator = await prisma.restaurator.create({
         data: {
-            profileId: Number(req.body.profile_id),
+            profileId: Number(req.body.profileId),
         },
     });
 

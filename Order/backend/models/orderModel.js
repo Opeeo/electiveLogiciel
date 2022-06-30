@@ -23,7 +23,7 @@ const orderSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    received_by_deliverylman:{
+    received_by_deliveryman:{
         type: Boolean,
         default: false
     } ,

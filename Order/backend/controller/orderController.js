@@ -45,11 +45,8 @@ const createOrder = asyncHandler(async (req, res, next) => {
     const order = await Order.create(req.body);
 
     const io = req.app.get("io");
-    const users = req.app.get("users");
 
-    const restaurant = await Restaurant.find({"id_restaurant": req.params.id_restaurant});
-
-    io.to(users[restaurant.id_restaurator]).emit("new_order", order);
+    io.emit("NewOrder"+req.body.id_restaurant, order);
 
     res.status(201).json(order);
 });
@@ -63,7 +60,17 @@ const updateAnOrder = asyncHandler(async (req, res, next) => {
 
     if(!order){
         res.status(400);
-        throw new Error('Restaurant not found');
+        throw new Error('Order not found');
+    }
+
+    const io = req.app.get("io");
+
+    if(req.body.accepted){
+        io.emit("OrderAccepted"+order.id_consumer, order);
+        io.emit("OrderToFulfill", order);
+    }
+    if(req.body.received_by_deliveryman){
+        io.emit("OrderReceived"+order.id_consumer, order);
     }
 
     const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, {new: true});
@@ -82,6 +89,10 @@ const deleteAnOrder = asyncHandler(async (req, res, next) => {
         res.status(400);
         throw new Error('Restaurant not found');
     }
+
+    const io = req.app.get("io");
+
+    io.emit("DeleteOrder"+order.id_consumer, order);
 
     const deletedorder = await Order.findByIdAndDelete(req.params.id);
 
