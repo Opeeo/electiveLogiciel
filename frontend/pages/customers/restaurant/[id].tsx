@@ -4,67 +4,32 @@ import Layout from "../../../components/layout";
 import { Button, Grid, Typography } from "@mui/material";
 import Item from "@mui/material/Grid";
 import styles from "../../../styles/Restaurants.module.css";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { getArticlesByRestaurant, IArticle } from "../../../lib/articles";
 
-interface IRestaurantProps {
-    restaurantId: string;
+interface IRestaurant_datas {
+    restaurantData: IRestaurant;
+    articles: string[];
 }
 
-
-
-const Restaurant: NextPage<IRestaurantProps> = ({ restaurantId }) => {
-
-    const [data, setData] = useState<IRestaurant>({
-        _id: "",
-        name: "",
-        img: "",
-        offer: ""
-    }
-    );
-
-    const [articles, setArticles] = useState<IArticle[]>([]);
-
-    useEffect(() => {
-        getArticlesByRestaurant(restaurantId).then(res => {
-            setArticles(res);
-        }
-        )
-        getRestaurant(restaurantId).then(res => {
-            console.log(res);
-            setData(res);
-        }
-        )
-    }, []);
-
-
+const Restaurant: NextPage<IRestaurant_datas> = ({ restaurantData, articles }) => {
     return (
         <Layout authentified>
             <div >
                 <main>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <div className={styles.divPhotoHeader}>
-                                <Image layout='fill' objectFit="cover" src={data.img ? data.img : 'https://d1ralsognjng37.cloudfront.net/6865c39c-39cb-416a-82bd-a7a597a3aeb7.jpeg'} />
-                            </div>
+                            <div className={styles.headerPhoto} />
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography variant="h2">{data.name}</Typography>
+                            <Typography variant="h2">{restaurantData.name}</Typography>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={2}>
+                            <Item>xs=6 md=4</Item>
+                        </Grid>
+                        <Grid item xs={10}>
                             <div className={styles.global}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
-                                        <Typography variant="h4">Articles</Typography>
-                                        {
-                                            articles.map(({ _id, name, price }: IArticle) => {
-                                                return (
-                                                    <Typography>{_id}, {name}, {price}</Typography>
-                                                )
-                                            }
-                                            )
-                                        }
+
                                     </Grid>
                                 </Grid>
                             </div>
@@ -87,9 +52,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     // Fetch necessary data for the blog post using params.id
+    console.log(params?.id);
+    const restaurantData = await getRestaurant(params?.id);
+    const articles = await getRestaurantsId();
     return {
         props: {
-            restaurantId: params?.id
+            restaurantData,
+            articles
         },
     };
 }
