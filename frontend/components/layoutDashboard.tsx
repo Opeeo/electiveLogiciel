@@ -37,6 +37,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const drawerWidth = 240;
 
@@ -104,27 +106,15 @@ const Layout: NextPage<ILayout> = ({ children, authentified = false, home = fals
             <Toolbar />
             <Divider />
             <List>
-                <Link href={"/customers/home"}>
-                    <ListItem key='home' disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <HomeIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='Home' />
-                        </ListItemButton>
-                    </ListItem>
+                <Link href='/restorers/home'>
+                    <ListItemButton >
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Dashboard" />
+                    </ListItemButton>
                 </Link>
-                <Link href={"/customers/profile"}>
-                    <ListItem key='profile' disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <PersonIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='Profile' />
-                        </ListItemButton>
-                    </ListItem>
-                </Link>
-                <Link href={"/customers/order/hist"}>
+                <Link href={"/restorers/order/hist"}>
                     <ListItem key='order' disablePadding>
                         <ListItemButton>
                             <ListItemIcon>

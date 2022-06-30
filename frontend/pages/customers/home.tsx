@@ -5,52 +5,81 @@ import styles from "../../styles/Home.module.css";
 import { IRestaurant, getRestaurants } from '../../lib/restaurants';
 import RestaurantCard from '../../components/restaurantCard';
 import Categories from '../../components/categories';
-import { log } from 'console';
 import { GetStaticProps } from 'next';
+import { Divider, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
-interface IRestaurant_list {
-    restaurant_list: IRestaurant[];
-}
+import { useDispatch, useSelector } from '../../store/store';
+import { getUserState, setEmail, setName, setToken } from '../../store/slices/userSlice';
 
-const CustomerHome: React.FC<IRestaurant_list> = ({ restaurant_list }) => {
+
+const CustomerHome: React.FC = () => {
+
+    const dispatch = useDispatch();
+    const { name, email, token } = useSelector(getUserState);
+
+    console.log(token)
+
+
+
+    const [restaurantList, setRestaurantList] = useState<IRestaurant[]>([]);
+
+    useEffect(() => {
+        getRestaurants(token).then(res => {
+            setRestaurantList(res);
+        }
+        )
+    }, []);
+
     return (
         <Layout authentified>
-            <div >
-                <main>
-                    <div className={styles.categories}>
-                        <Categories />
-                    </div>
+            <main suppressHydrationWarning>
+                <div className={styles.categories}>
+                    <Categories />
 
-                    <Grid container spacing={1}>
-                        <Grid item xs={2}>
-                            <Item>xs=6 md=4</Item>
-                        </Grid>
-                        <Grid item xs={10}>
-                            <div className={styles.global}>
+                </div>
+                <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                        <div className={styles.global}>
+
+                            <section suppressHydrationWarning>
+                                <Typography variant="h4" className={styles.sectionTitle}>
+                                    Offers
+                                </Typography>
                                 {
-                                    restaurant_list.map(({ _id, name, rate, fav, img, offer }: IRestaurant) => (
-                                        <RestaurantCard id={_id} name={name} rate={rate} fav={fav} img={img} offer={offer} />
-                                    ))
+                                    restaurantList.map(({ _id, name, img, offer }: IRestaurant) => {
+                                        if (offer === 'true') {
+                                            return (
+                                                <RestaurantCard key={_id} id={_id} name={name} img={img} offer={offer} />
+                                            )
+                                        }
+                                    })
                                 }
-                            </div>
-                        </Grid>
+                            </section>
+                            <Divider />
+                            <section suppressHydrationWarning>
+                                <Typography variant="h4" className={styles.sectionTitle}>
+                                    Restaurants
+                                </Typography>
+                                {
+                                    restaurantList.map(({ _id, name, img, offer }: IRestaurant) => {
+                                        if (offer === 'false') {
+                                            return (
+                                                <RestaurantCard key={_id} id={_id} name={name} img={img} offer={offer} />
+                                            )
+                                        }
+                                    })
+                                }
+                            </section>
+
+                        </div>
                     </Grid>
-
-                </main>
-            </div>
+                </Grid>
+            </main>
         </Layout>
-
     );
 }
 
 
-export const getStaticProps: GetStaticProps = async () => {
-    const restaurant_list = await getRestaurants();
-    return {
-        props: {
-            restaurant_list,
-        },
-    };
-}
 
 export default CustomerHome;

@@ -12,6 +12,8 @@ import { getOrdersByRestaurant, acceptOrder, IOrder } from '../lib/orders';
 import { GetStaticProps } from 'next';
 import { idText } from 'typescript';
 import Moment from 'moment';
+import { useDispatch, useSelector } from '../store/store';
+import { getUserState, setEmail, setName, setToken } from '../store/slices/userSlice';
 
 
 interface IOrders_list {
@@ -21,10 +23,12 @@ interface IOrders_list {
 
 const OrderListAccepted : React.FC<IOrders_list> = ({ restaurantId }) => {
 
+    const { name, email, token } = useSelector(getUserState);
+
     const [data, setData] = React.useState<IOrder[]>([]);
 
     React.useEffect(() => {
-        getOrdersByRestaurant(restaurantId).then(res => {
+        getOrdersByRestaurant(restaurantId, token).then(res => {
             setData(res);
         });
     }, []);
@@ -35,7 +39,8 @@ const OrderListAccepted : React.FC<IOrders_list> = ({ restaurantId }) => {
         <Table>
             <TableHead>
             <TableRow>
-                <TableCell>Date</TableCell>
+                <TableCell>Order n°</TableCell>
+                <TableCell align="center">Date</TableCell>
                 <TableCell align="center">Ship To</TableCell>
                 <TableCell align="center">Accepted</TableCell>
                 <TableCell align="center">Received by deliveryman</TableCell>
@@ -44,8 +49,9 @@ const OrderListAccepted : React.FC<IOrders_list> = ({ restaurantId }) => {
             </TableRow>
             </TableHead>
             <TableBody>
-            {data.map((order : IOrder) => ( order.accepted ?      
+            {data.map((order : IOrder) => ( order.accepted && order.received_by_deliverylman ?      
                 <TableRow key={order._id}>
+                <TableCell>{order._id.slice(-5).toUpperCase()}</TableCell>
                 <TableCell>{Moment(order.purchase_date).format('dddd Do h:mm:ss a')}</TableCell>
                 <TableCell align="center">{order.adress}</TableCell>
                 <TableCell align="center">{order.accepted ? "Accepted" : "Waiting"}</TableCell>

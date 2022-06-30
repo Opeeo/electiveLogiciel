@@ -11,11 +11,9 @@ import Dashboard from '../../components/dashboard';
 const Home: NextPage = () => {
     return (
         <Layout authentified={true} home={true}>
-            <Dashboard>
             <div>
                 <h1>For merchants</h1>
-            </div>
-            </Dashboard>            
+            </div>          
         </Layout>
 
     );
