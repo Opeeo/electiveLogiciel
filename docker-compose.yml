@@ -10,20 +10,6 @@ services:
     volumes:       
       - ~/apps/mysql:/data/db 
 
-  adresses:
-    build: './Adresses'
-    ports:
-      - 3001:3000
-    depends_on:
-      - db_user
-  
-  order:
-    build: './Order'
-    ports:
-      - 3002:3000
-    depends_on:
-      - db_user
-
   profile:
     build: './Profile'
     ports:
@@ -36,10 +22,6 @@ services:
     build: './Restaurant'
     ports:
       - 3005:3000
-  restaurant1:
-    build: './Restaurant'
-    ports:
-      - 3006:3000
   
   nginx:
     image: nginx:latest
@@ -49,7 +31,4 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - restaurant
-      - restaurant1
       - profile
-      - order
-      - adresses

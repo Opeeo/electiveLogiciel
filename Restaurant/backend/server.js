@@ -14,9 +14,9 @@ const options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Profile API",
+            title: "Restaurant API",
             version: "1.0.0",
-            description: "A simple Express Profile API",
+            description: "A simple Express Restaurant API",
         },
     },
     apis: [`${path.join(__dirname, "./routes/*.js")}`],
