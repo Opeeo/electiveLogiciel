@@ -4,7 +4,6 @@ const { errorHandler } = require("./middleware/errorMiddleware");
 const connectDB = require("./config/db");
 const cors = require('cors')
 const port = 3000;
-const cors = require('cors');
 
 const app = express();
 app.use(cors({origin: "http://localhost:3000"}));
@@ -20,10 +19,6 @@ const io = require("socket.io")(server, {
 });
 
 connectDB(); 
-
-app.use(cors({
-    origin: 'http://localhost:3000'
-}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
