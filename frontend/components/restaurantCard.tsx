@@ -9,17 +9,16 @@ interface IRestaurantCard {
     id: string,
     name: string,
     img: string,
+    rate: String,
+    fav: string,
     offer: string
 }
 
-const RestaurantCard: NextPage<IRestaurantCard> = ({ id, name, img, offer }) => {
+const RestaurantCard: NextPage<IRestaurantCard> = ({ id, name, img, rate, fav, offer }) => {
 
     return (
         <Card className={styles.restaurantCard} >
             <CardActionArea href={'/customers/restaurant/' + id}>
-                {
-                    offer === 'true' ? <div className={styles.offer}>Offer -10%</div> : null
-                }
                 <CardMedia
                     component="img"
                     height="140"
@@ -31,7 +30,7 @@ const RestaurantCard: NextPage<IRestaurantCard> = ({ id, name, img, offer }) => 
                         {name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {offer}
+                        {rate}, {fav}, {offer}
                     </Typography>
                 </CardContent>
             </CardActionArea>
