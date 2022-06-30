@@ -4,7 +4,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from '../store/store';
 import { getUserState, setEmail, setName, setToken } from '../store/slices/userSlice';
 
-export interface IUser {
+export interface IUser { 
     profileId?: number;
     email: string;
     first_name?: string;
