@@ -1,0 +1,27 @@
+.footer {
+    position: absolute;
+    width: 100%;
+    padding: 2rem 0;
+    border-top: 1px solid #ffffff;
+    background: #f1f1f1;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.content {
+    padding: 20px;
+}
+
+.has-text-centered {
+    text-align: center;
+}
+
+.icon {
+    margin-right: 10px;
+}
