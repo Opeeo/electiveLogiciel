@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv').config;
 const { errorHandler } = require("./middleware/errorMiddleware");
 const connectDB = require("./config/db");
-const cors = require('cors')
+const cors = require('cors');
 const port = 3000;
 
 const app = express();
@@ -13,8 +13,8 @@ const server = http.createServer(app);
 
 const io = require("socket.io")(server, {
   cors: {
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: "http://localhost:3000",
+    methods: ["GET","PUT","POST","DELETE"],
   }
 });
 
@@ -30,10 +30,13 @@ app.use(errorHandler);
 const users = []
 app.set("users", users);
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    console.log(socket.id);
-    users.push(socket);
+io.sockets.on("connection", function (socket) {
+  console.log("a user connected" + socket.id);
+
+  socket.on("disconnect", function () {
+    console.log("user disconnected");
+  }
+  );
 });
 
 server.listen(port, () => {

@@ -147,7 +147,7 @@ const deleteAProfile = asyncHandler(async (req, res, next) => {
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '20m',
+        expiresIn: '30d',
     })
 }
 
