@@ -25,12 +25,15 @@ export const getRestaurants = async (token: string) => {
 }
 
 //Get one restaurant with axios typescript
-export const getRestaurant = async (id: string | string[] | undefined) => {
+export const getRestaurant = async (id: string | string[] | undefined, token: string) => {
     //If id is undefined, return error
     if (!id) {
         throw new Error('No id provided');
     }
-    const response = await axios.get(`http://localhost:8080/api/restaurant/${id}`);
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`http://localhost:8080/api/restaurant/${id}`, config);
     return response.data;
 }
 

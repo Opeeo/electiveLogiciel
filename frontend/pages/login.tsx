@@ -11,14 +11,24 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Image from 'next/image';
-import {useRouter} from 'next/router'
-import {useState} from 'react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { setId, setToken } from '../store/slices/userSlice';
+import { useDispatch, useSelector } from '../store/store';
+import { login } from '../lib/auth';
 
 const theme = createTheme();
 
+/**
+ * A sign in page.
+ * @constructor
+ */
 export default function SignIn() {
 
     const router = useRouter()
+
+    const dispatch = useDispatch();
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -26,7 +36,32 @@ export default function SignIn() {
             email: data.get('email'),
             password: data.get('password'),
         });
-        router.push("/customers/home")
+
+        login(String(data.get('email')), String(data.get('password'))).then(res => {
+            if (res) {
+                dispatch(setToken(res.token ? res.token : ''));
+                dispatch(setId(res.profileId ? res.profileId : 0));
+                console.log(res);
+                switch (res.roleId) {
+                    case 1:
+                        router.push('/customers/home');
+                        break;
+                    case 2:
+                        router.push('/restorers/home');
+                        break;
+                    case 3:
+                        router.push('/deliveryman/home');
+                        break;
+
+                    default:
+                        alert('Invalid role');
+                        break;
+                }
+            }
+        }).catch(err => {
+            alert(err);
+        }
+        )
     };
 
     return (
@@ -72,21 +107,16 @@ export default function SignIn() {
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Link href="/home">
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
 
-                            >
-                                Sign In
-                            </Button>
-                        </Link>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+
+                        >
+                            Sign In
+                        </Button>
 
 
                         <Grid container>

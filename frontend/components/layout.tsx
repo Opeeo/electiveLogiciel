@@ -37,6 +37,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const drawerWidth = 240;
 
@@ -131,6 +132,16 @@ const Layout: NextPage<ILayout> = ({ children, authentified = false, home = fals
                                 <BookmarkIcon />
                             </ListItemIcon>
                             <ListItemText primary='Order' />
+                        </ListItemButton>
+                    </ListItem>
+                </Link>
+                <Link href={"/customers/basket"}>
+                    <ListItem key='basket' disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <ShoppingCartIcon />
+                            </ListItemIcon>
+                            <ListItemText primary='Cart' />
                         </ListItemButton>
                     </ListItem>
                 </Link>

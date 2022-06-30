@@ -4,6 +4,7 @@ export interface UserState {
     email: string;
     name: string;
     token: string;
+    id: number;
 }
 
 /**
@@ -12,7 +13,8 @@ export interface UserState {
 const initialState: UserState = {
     name: '',
     email: '',
-    token: ''
+    token: '',
+    id: 0,
 } as const;
 
 /**
@@ -43,6 +45,17 @@ export const userSlice = createSlice({
         ) => {
             state.token = action.payload;
         },
+        setId: (
+            state: Draft<typeof initialState>,
+            action: PayloadAction<typeof initialState.id>
+        ) => {
+            state.id = action.payload;
+        },
+        unsetToken: (
+            state: Draft<typeof initialState>,
+        ) => {
+            state.token = '';
+        }
     },
 });
 
@@ -50,6 +63,6 @@ export const userSlice = createSlice({
 export const getUserState = (state: { user: UserState }) => state.user;
 
 // Exports all actions
-export const { setName, setEmail, setToken } = userSlice.actions;
+export const { setName, setEmail, setToken, unsetToken, setId } = userSlice.actions;
 
 export default userSlice.reducer;

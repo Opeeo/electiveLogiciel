@@ -15,6 +15,7 @@ export interface IUser {
     promotionnal_notification?: boolean;
     promotionnal_email?: boolean;
     delivery_notification?: boolean;
+    vehicule_type?: string;
     token?: string;
 }
 
@@ -58,6 +59,16 @@ export function register(user: IUser): Promise<IUser> {
                     );
                 break;
 
+            case 3:
+                return axios.post("http://localhost:8080/api/profile/deliveryman", user_created, config).then(response => {
+                    return user_created;
+                })
+                    .catch(error => {
+                        throw error;
+                    }
+                    );
+                break;
+
             default:
                 throw new Error("Role not found");
                 break;
@@ -75,8 +86,11 @@ export function register(user: IUser): Promise<IUser> {
 
 //Login with email and password and return the user with axios typescript and JsonWebToken
 export function login(email: string, password: string): Promise<IUser> {
-    return axios.post("http://localhost:8080/api/users/login", { email, password })
-        .then(response => response.data);
+    return axios.post("http://localhost:8080/api/profile/login", { email, password })
+        .then(response => {
+            console.log(response.data);
+            return response.data;
+        });
 }
 
 //Get a user with axios typescript and JsonWebToken

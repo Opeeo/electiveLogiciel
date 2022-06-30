@@ -15,10 +15,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Image from 'next/image';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
-import { FormGroup } from '@mui/material';
+import { FormControl, FormGroup, InputLabel, MenuItem, Select } from '@mui/material';
 import { IUser, register } from '../lib/auth';
-import { setToken } from '../store/slices/userSlice';
-import { useDispatch, useSelector } from '../store/store';
+import { setToken, setId } from '../store/slices/userSlice';
+import { useDispatch } from '../store/store';
 
 const theme = createTheme();
 /**
@@ -30,6 +30,7 @@ export default function Register() {
     const dispatch = useDispatch();
 
     const [showCustomer, setShowCustomer] = React.useState(false);
+    const [showDeliveryman, setShowDeliveryman] = React.useState(false);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
@@ -55,6 +56,7 @@ export default function Register() {
                 register(userConsumer).then((res) => {
                     if (res) {
                         dispatch(setToken(res.token ? res.token : ''));
+                        dispatch(setId(res.profileId ? res.profileId : 0));
                         window.location.href = '/customers/home';
                     }
                 }
@@ -76,6 +78,28 @@ export default function Register() {
                     if (res) {
                         dispatch(setToken(res.token ? res.token : ''));
                         window.location.href = '/restorers/home';
+                    }
+                }
+                );
+
+                break;
+
+            case 3:
+                const userDeliveryman: IUser = {
+                    email: String(data.get('email')),
+                    password: String(data.get('password')),
+                    first_name: String(data.get('first_name')),
+                    last_name: String(data.get('last_name')),
+                    phone_number: String(data.get('phone_number')),
+                    roleId: Number(data.get('role')),
+                    vehicule_type: String(data.get('vehicule_type')),
+                }
+
+                console.log(userDeliveryman);
+                register(userDeliveryman).then((res: any) => {
+                    if (res) {
+                        dispatch(setToken(res.token ? res.token : ''));
+                        window.location.href = '/deliveryman/home';
                     }
                 }
                 );
@@ -171,8 +195,9 @@ export default function Register() {
                                     defaultValue="consumer"
                                     name="role"
                                 >
-                                    <FormControlLabel onClick={() => { setShowCustomer(true); }} value="1" control={<Radio />} label="Consumer" />
-                                    <FormControlLabel onClick={() => { setShowCustomer(false); }} value="2" control={<Radio />} label="Restaurator" />
+                                    <FormControlLabel onClick={() => { setShowCustomer(true); setShowDeliveryman(false) }} value="1" control={<Radio />} label="Consumer" />
+                                    <FormControlLabel onClick={() => { setShowCustomer(false); setShowDeliveryman(false) }} value="2" control={<Radio />} label="Restaurator" />
+                                    <FormControlLabel onClick={() => { setShowCustomer(false); setShowDeliveryman(true) }} value="3" control={<Radio />} label="Deliveryman" />
                                 </RadioGroup>
                             </Grid>
                             {showCustomer && (
@@ -191,6 +216,25 @@ export default function Register() {
                                         <FormGroup>
                                             <FormControlLabel control={<Checkbox />} label="Delivery notif" name='delivery_notification' />
                                         </FormGroup>
+                                    </Grid>
+                                </>
+
+                            )}
+                            {showDeliveryman && (
+                                <>
+                                    <Grid item xs={12}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Select a vehicle type</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                name='vehicule_type'
+                                                label="Vehicle type"
+                                            >
+                                                <MenuItem value={'Bike'}>Bike</MenuItem>
+                                                <MenuItem value={'Car'}>Car</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
                                 </>
 

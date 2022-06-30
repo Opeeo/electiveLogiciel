@@ -15,8 +15,11 @@ export const getArticles = async () => {
 }
 
 //Get all articles with restaurant id with axios typescript
-export const getArticlesByRestaurant = async (id: string) => {
-    const response = await axios.get(`http://localhost:8080/api/restaurant/article/${id}`);
+export const getArticlesByRestaurant = async (id: string, token: string) => {
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`http://localhost:8080/api/restaurant/article/${id}`, config);
     const data: IArticle[] = response.data;
     return data;
 }
