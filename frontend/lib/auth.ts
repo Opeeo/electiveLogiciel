@@ -51,6 +51,7 @@ export function register(user: IUser): Promise<IUser> {
 
             case 2:
                 return axios.post("http://localhost:8080/api/profile/restaurator", user_created, config).then(response => {
+                    
                     return user_created;
                 })
                     .catch(error => {

@@ -18,6 +18,8 @@ const CustomerHome: React.FC = () => {
     const dispatch = useDispatch();
     const { name, email, token } = useSelector(getUserState);
 
+    console.log(token)
+
 
 
     const [restaurantList, setRestaurantList] = useState<IRestaurant[]>([]);
