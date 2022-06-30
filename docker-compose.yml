@@ -7,6 +7,8 @@ services:
       - MYSQL_ROOT_PASSWORD=mysqlpw
     ports:
       - 3306:3306
+    volumes:       
+      - ~/apps/mysql:/data/db 
 
   adresses:
     build: './Adresses'
@@ -29,12 +31,6 @@ services:
     depends_on:
       - db_user
 
-  rate:
-    build: './Rate'
-    ports:
-      - 3004:3000
-    depends_on:
-      - db_user
   
   restaurant:
     build: './Restaurant'
@@ -54,7 +50,6 @@ services:
     depends_on:
       - restaurant
       - restaurant1
-      - rate
       - profile
       - order
       - adresses
