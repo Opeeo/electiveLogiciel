@@ -14,16 +14,12 @@ const server = http.createServer(app);
 
 const io = require("socket.io")(server, {
   cors: {
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: "http://localhost:3000",
+    methods: ["GET","PUT","POST","DELETE"],
   }
 });
 
 connectDB(); 
-
-app.use(cors({
-    origin: 'http://localhost:3000'
-}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,10 +31,13 @@ app.use(errorHandler);
 const users = []
 app.set("users", users);
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    console.log(socket.id);
-    users.push(socket);
+io.sockets.on("connection", function (socket) {
+  console.log("a user connected" + socket.id);
+
+  socket.on("disconnect", function () {
+    console.log("user disconnected");
+  }
+  );
 });
 
 server.listen(port, () => {

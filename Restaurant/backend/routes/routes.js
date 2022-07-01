@@ -227,12 +227,12 @@ router.route('/restaurant/').get(getRestaurants).post(protect, IsRestaurator, cr
 router.route('/restaurant/:id').get(getARestaurant).put(protect, IsRestaurator, updateARestaurant).delete(protect, IsRestaurator, deleteARestaurant);
 
 //Routers for articles
-router.route('/restaurant/article/:id_restaurant').get(protect, IsRestaurator, getArticles);
+router.route('/restaurant/article/:id_restaurant').get(protect, getArticles);
 router.route('/restaurant/article/:id').put(protect, IsRestaurator, updateAnArticle).delete(protect, IsRestaurator, deleteAnArticle);
 router.route('/restaurant/article/').post(protect, IsRestaurator, createAnArticle);
 
 //Routeurs for menus
-router.route('/restaurant/menu/:id_restaurant').get(protect, IsRestaurator, getMenus);
+router.route('/restaurant/menu/:id_restaurant').get(protect, getMenus);
 router.route('/restaurant/menu/:id').put(protect, IsRestaurator, updateAMenu).delete(protect, IsRestaurator, deleteAMenu);
 router.route('/restaurant/menu/').post(protect, IsRestaurator, createAMenu);
 

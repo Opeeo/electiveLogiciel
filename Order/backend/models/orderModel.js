@@ -10,7 +10,7 @@ const orderSchema = mongoose.Schema({
         required: [true, "price required"]
     },
     articles: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [String],
         required: [true, "articles required"]
     },
     menu: [mongoose.Schema.Types.ObjectId],
@@ -23,11 +23,14 @@ const orderSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    received_by_deliverylman:{
+    received_by_deliveryman:{
         type: Boolean,
         default: false
     } ,
-    id_restaurant: mongoose.Schema.Types.ObjectId,
+    id_restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "id_consumer required"]
+    },
     id_consumer: {
         type: Number,
         required: [true, "id_consumer required"]
