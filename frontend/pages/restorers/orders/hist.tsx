@@ -1,8 +1,8 @@
 //Page to see all the orders of a restaurer
 import { NextPage } from "next";
 import Layout from "../../../components/layoutDashboard";
-import OrderListAccepted from "../../../components/order_accpeted";
-import OrderList from "../../../components/order";
+import OrderListAccepted from "../../../components/orderHistRestaurant";
+import OrderList from "../../../components/orderRestaurant";
 
 
 const Hist: NextPage = () => {
