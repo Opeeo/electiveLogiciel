@@ -4,8 +4,7 @@ import Grid from '@mui/material/Grid';
 import Item from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import styles from "../../styles/Home.module.css";
-import Layout from "../../components/layout";
-import Dashboard from '../../components/dashboard';
+import Layout from "../../components/layoutDashboard";
 
 
 const Home: NextPage = () => {
@@ -13,7 +12,7 @@ const Home: NextPage = () => {
         <Layout authentified={true} home={true}>
             <div>
                 <h1>For merchants</h1>
-            </div>          
+            </div>
         </Layout>
 
     );

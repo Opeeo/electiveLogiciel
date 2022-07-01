@@ -114,7 +114,7 @@ const Layout: NextPage<ILayout> = ({ children, authentified = false, home = fals
                         <ListItemText primary="Dashboard" />
                     </ListItemButton>
                 </Link>
-                <Link href={"/restorers/order/hist"}>
+                <Link href={"/restorers/orders/hist"}>
                     <ListItem key='order' disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
