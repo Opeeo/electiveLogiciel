@@ -14,7 +14,7 @@ export interface IOrder {
     delivered: boolean;
     id_restaurant: string;
     id_consumer: number;
-    id_deliveryman:  number;
+    id_deliveryman: number;
     accepted: boolean;
     received_by_deliveryman: boolean;
 }
@@ -61,13 +61,17 @@ export const receiveOrder = async (id: string, token: string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.put(`http://localhost:8080/api/order/${id}`, { received_by_deliveryman: true }, config);
+    console.log("i'm here");
+
+    const response = await axios.put(`http://localhost:8080/api/order/${id}`, { received_by_deliverylman: true }, config);
     const data: IOrder = response.data;
+    console.log('here are the datas : ', data);
+
     return data;
 }
 
 //Get orders by deliveryman id with axios and typescript
-export const getOrdersByDeliveryman = async (id: string, token: string) => {
+export const getOrdersByDeliveryman = async (id: number, token: string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };

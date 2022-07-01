@@ -1,7 +1,7 @@
 //Home page for deliveryman
 
 import { NextPage } from "next";
-import Layout from "../../components/layout";
+import Layout from "../../components/layoutDeliveryman";
 
 
 const Home: NextPage = () => {

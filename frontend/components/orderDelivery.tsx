@@ -5,7 +5,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import mongoose from 'mongoose';
 import Title from './Title';
 //import order from '../lib/order';
 import { getOrdersByDeliveryman, acceptOrder, IOrder, deleteOrder, receiveOrder } from '../lib/orders';
@@ -37,7 +36,7 @@ const OrderList : React.FC<IOrders_list> = ({ restaurantId }) => {
     }, []);  
 
     React.useEffect(() => {
-        getOrdersByDeliveryman(restaurantId, token).then(res => {
+        getOrdersByDeliveryman(2, token).then(res => {
             var temp:IOrder[] = [];
             res.forEach(element => {
                 if(!element.delivered){
